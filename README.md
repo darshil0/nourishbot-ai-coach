@@ -159,7 +159,7 @@ For a deeper technical tour, see `Walkthrough.MD`.
 
 ---
 
-## Extending the Project
+## Future Enhancements
 
 Some ideas for next steps:
 
