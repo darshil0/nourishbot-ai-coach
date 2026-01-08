@@ -171,21 +171,24 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen pb-20">
-      <header className="bg-white border-b border-slate-100 sticky top-0 z-50">
+    <div className="min-h-screen pb-20 bg-slate-50/60 bg-[radial-gradient(circle_at_top,_rgba(74,222,128,0.18),_transparent_55%),_radial-gradient(circle_at_bottom,_rgba(15,23,42,0.08),_transparent_55%)]">
+      <header className="bg-white/90 backdrop-blur-md border-b border-slate-100 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-green-100">
+            <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-green-200/70">
               <Apple className="w-6 h-6" />
             </div>
-            <span className="font-black text-xl text-slate-800 tracking-tight">NourishBot</span>
+            <div className="flex flex-col">
+              <span className="font-black text-xl text-slate-900 tracking-tight leading-tight">NourishBot</span>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-green-500/80">AI Nutrition Coach</span>
+            </div>
           </div>
-          <div className="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-500">
-            <span className="text-green-600">Coach</span>
-            <span>Planner</span>
-            <span>Journal</span>
+          <div className="hidden md:flex items-center gap-4 text-xs font-semibold text-slate-500">
+            <span className="px-3 py-1 rounded-full bg-green-50 text-green-700 border border-green-100">Coach</span>
+            <span className="px-3 py-1 rounded-full border border-dashed border-slate-200">Planner</span>
+            <span className="px-3 py-1 rounded-full border border-dashed border-slate-200">Journal</span>
           </div>
-          <button className="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-all">
+          <button className="hidden sm:inline-flex bg-slate-900 text-white px-4 py-2.5 rounded-lg text-xs font-bold hover:bg-slate-800 transition-all shadow-md shadow-slate-300/60">
             Dashboard
           </button>
         </div>
@@ -293,14 +296,21 @@ const App: React.FC = () => {
 
           <div className="lg:col-span-8">
             {!nutritionResult && !recipeResult && !loading && (
-              <div className="h-full min-h-[500px] flex flex-col items-center justify-center text-center p-12 bg-white rounded-3xl border-2 border-dashed border-slate-100">
-                <div className="w-24 h-24 bg-green-50 rounded-3xl rotate-6 flex items-center justify-center mb-8">
+              <div className="h-full min-h-[500px] flex flex-col items-center justify-center text-center p-12 bg-gradient-to-br from-white via-slate-50 to-green-50 rounded-3xl border-2 border-dashed border-slate-100/80 shadow-sm">
+                <div className="w-24 h-24 bg-green-50 rounded-3xl rotate-6 flex items-center justify-center mb-8 shadow-inner shadow-green-100">
                   <Apple className="w-12 h-12 text-green-400 -rotate-6" />
                 </div>
-                <h3 className="text-2xl font-black text-slate-800 mb-3 tracking-tight">Your Nutrition Hub</h3>
-                <p className="text-slate-500 max-w-sm leading-relaxed">
-                  Join thousands using AI to transform their diet. Upload your first meal or select a past analysis from your log.
+                <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-3 tracking-tight">
+                  Your Nutrition Command Center
+                </h3>
+                <p className="text-slate-500 max-w-md leading-relaxed mb-4">
+                  Upload a photo of your meal to get an instant nutritional breakdown or AI-crafted recipe tuned to your goals.
                 </p>
+                <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] font-semibold text-slate-500 uppercase tracking-[0.2em]">
+                  <span className="px-3 py-1 rounded-full bg-white border border-slate-100">Vision</span>
+                  <span className="px-3 py-1 rounded-full bg-white border border-slate-100">Nutrition</span>
+                  <span className="px-3 py-1 rounded-full bg-white border border-slate-100">Culinary</span>
+                </div>
               </div>
             )}
 

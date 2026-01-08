@@ -15,7 +15,14 @@ export const HistoryLog: React.FC<Props> = ({ items, onSelect, onDelete, onUpdat
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
 
-  if (items.length === 0) return null;
+  if (items.length === 0) {
+    return (
+      <div className="bg-white rounded-xl shadow-sm border border-dashed border-slate-200 p-4 text-xs text-slate-500 flex items-center gap-2">
+        <History className="w-4 h-4 text-slate-300" />
+        <span>No saved meals yet. Run an analysis and your history will appear here.</span>
+      </div>
+    );
+  }
 
   const startEditing = (e: React.MouseEvent, item: HistoryItem) => {
     e.stopPropagation();

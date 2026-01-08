@@ -58,22 +58,25 @@ export const NutritionAnalysis: React.FC<Props> = ({ data }) => {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-center items-center text-center">
-          <div className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-2">Total Calories</div>
-          <div className="text-6xl font-black text-slate-800">{data.totalCalories}</div>
-          <div className="text-sm text-slate-400 mt-2">kcal estimated</div>
-          
-          <div className="mt-8 w-full">
-             <div className="flex justify-between mb-1">
-                <span className="text-xs font-medium text-slate-700">Health Score</span>
-                <span className="text-xs font-medium text-slate-700">{data.healthScore}/100</span>
-             </div>
-             <div className="w-full bg-slate-100 rounded-full h-2.5">
-                <div 
-                    className="bg-green-500 h-2.5 rounded-full" 
-                    style={{ width: `${data.healthScore}%` }}
+        <div className="bg-gradient-to-br from-emerald-500 via-green-500 to-emerald-600 p-6 rounded-2xl shadow-sm text-white flex flex-col justify-center items-center text-center relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top,_white,_transparent_60%)]" />
+          <div className="relative z-10 w-full">
+            <div className="text-sm font-semibold text-emerald-50 uppercase tracking-widest mb-2">Total Calories</div>
+            <div className="text-6xl font-black text-white drop-shadow-sm">{data.totalCalories}</div>
+            <div className="text-sm text-emerald-50/90 mt-2">kcal estimated</div>
+
+            <div className="mt-8 w-full">
+              <div className="flex justify-between mb-1">
+                <span className="text-xs font-medium text-emerald-50">Health Score</span>
+                <span className="text-xs font-medium text-emerald-50">{data.healthScore}/100</span>
+              </div>
+              <div className="w-full bg-emerald-900/30 rounded-full h-2.5 overflow-hidden">
+                <div
+                  className="h-2.5 rounded-full bg-gradient-to-r from-lime-300 via-emerald-200 to-emerald-50"
+                  style={{ width: `${data.healthScore}%` }}
                 ></div>
-             </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

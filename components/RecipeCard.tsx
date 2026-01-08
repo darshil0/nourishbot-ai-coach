@@ -9,7 +9,7 @@ interface Props {
 
 export const RecipeCard: React.FC<Props> = ({ recipe }) => {
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className="bg-gradient-to-br from-white via-slate-50 to-emerald-50 rounded-2xl shadow-sm border border-slate-100/80 overflow-hidden">
       <div className="p-8">
         <div className="flex flex-wrap gap-2 mb-4">
           {recipe.dietaryTags?.map((tag, i) => (
@@ -22,7 +22,7 @@ export const RecipeCard: React.FC<Props> = ({ recipe }) => {
         <h2 className="text-3xl font-black text-slate-800 mb-2">{recipe.title}</h2>
         <p className="text-slate-500 mb-6">{recipe.description}</p>
         
-        <div className="flex gap-6 mb-8 border-y border-slate-100 py-4">
+        <div className="flex flex-wrap gap-6 mb-8 border-y border-slate-100 py-4">
           <div className="flex items-center gap-2 text-slate-600">
             <Clock className="w-4 h-4" />
             <span className="text-sm font-medium">{recipe.prepTime}</span>
