@@ -108,7 +108,7 @@ const App: React.FC = () => {
 
       // Add to history
       const newHistoryItem: HistoryItem = {
-        id: Math.random().toString(36).substr(2, 9),
+        id: Math.random().toString(36).slice(2, 11),
         timestamp: Date.now(),
         image,
         workflow,

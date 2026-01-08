@@ -2,7 +2,8 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { NutritionData, RecipeData, DietaryPreference } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+const apiKey = process.env.GEMINI_API_KEY || process.env.API_KEY || '';
+const ai = new GoogleGenAI({ apiKey });
 
 /**
  * Agent 1: Vision Specialist
@@ -11,16 +12,24 @@ const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
 export async function visionAgent(imageBase64: string): Promise<string[]> {
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
-    contents: {
-      parts: [
-        { inlineData: { mimeType: 'image/jpeg', data: imageBase64 } },
-        { text: "List every identifiable food ingredient or dish in this image. Return only a comma-separated list of items." }
-      ]
-    }
+    contents: [
+      { inlineData: { mimeType: 'image/jpeg', data: imageBase64 } },
+      {
+        text:
+          "List every identifiable food ingredient or dish in this image. Return only a comma-separated list of items.",
+      },
+    ],
   });
-  
-  const text = response.text || "";
-  return text.split(',').map(s => s.trim()).filter(s => s.length > 0);
+
+  const text = (response.text || "").trim();
+  if (!text) {
+    return [];
+  }
+
+  return text
+    .split(',')
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
 }
 
 /**
