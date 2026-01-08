@@ -1,0 +1,7 @@
+{
+  "name": "NourishBot AI",
+  "description": "A multi-agent AI nutrition coach that analyzes food images to provide nutritional breakdowns and personalized recipe suggestions.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
