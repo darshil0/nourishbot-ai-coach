@@ -25,7 +25,7 @@ Understanding these shapes is critical when changing Gemini prompts or UI compon
 
 ## 3. Multi-Agent Orchestration (`App.tsx`)
 
-Key pieces:\r
+Key pieces:
 
 - `runMultiAgentPipeline` orchestrates the call chain.
 - `visionAgent` is always called first with base64 image data.
@@ -39,7 +39,7 @@ If you add new agents, follow the same pattern: update `logs`, extend `HistoryIt
 
 ## 4. Gemini Integration (`services/geminiService.ts`)
 
-- `GoogleGenAI` is initialized with `GEMINI_API_KEY` (falling back to `API_KEY` for compatibility).
+- `GoogleGenAI` is initialized with `VITE_GEMINI_API_KEY` from `import.meta.env`.
 - **Vision agent**: sends the image as inline binary plus a strict instruction to return a comma-separated list.
 - **Nutrition analyst**: uses structured JSON output with `responseMimeType: "application/json"` and a schema matching `NutritionData`.
 - **Culinary expert**: returns a recipe JSON object shaped like `RecipeData`.
@@ -76,7 +76,7 @@ Some ideas:
 
 Once Node and npm are installed:
 
-```bash path=null start=null
+```bash
 npm install
 npm run dev
 ```
