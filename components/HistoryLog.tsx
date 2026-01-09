@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { HistoryItem, Workflow, NutritionData, RecipeData } from '../types';
 import { History, Trash2, ChevronRight, Apple, CookingPot, Edit2, Check, X } from 'lucide-react';
@@ -160,5 +159,15 @@ export const HistoryLog: React.FC<Props> = ({ items, onSelect, onDelete, onUpdat
 
               {isActive && !editingId && (
                 <div className="px-3 pb-4 animate-in slide-in-from-top-2 duration-300">
-                  <div className="bg-white rounded-lg border border-slate-100 p-2.5 shadow-sm overflow-hidden">
-                    <div
+                  <div className="bg-white rounded-lg border border-slate-100 p-2.5 shadow-sm">
+                    {renderConciseSummary(item)}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
