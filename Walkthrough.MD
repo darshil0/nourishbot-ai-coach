@@ -63,7 +63,7 @@ You can customize Tailwind classes directly in the JSX to tweak the look-and-fee
 
 If you change the shape of `HistoryItem`, remember to handle backward compatibility when parsing old data from `localStorage`.
 
-## 7. Extending the Project
+## 7. Future Enhancements
 
 Some ideas:
 

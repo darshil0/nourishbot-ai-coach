@@ -129,6 +129,7 @@ export const HistoryLog: React.FC<Props> = ({ items, onSelect, onDelete, onUpdat
                       </p>
                     </div>
                   )}
+                  {renderConciseSummary(item)}
                 </div>
 
                 <div className="flex items-center gap-0.5">

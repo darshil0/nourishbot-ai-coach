@@ -20,7 +20,7 @@ It is designed as a demo-quality app that showcases:
 - [Available Scripts](#available-scripts)
 - [Key Files & Folders](#key-files--folders)
 - [Data & Privacy Notes](#data--privacy-notes)
-- [Extending the Project](#extending-the-project)
+- [Future Enhancements](#future-enhancements)
 
 ---
 
@@ -167,7 +167,7 @@ For a deeper technical tour, see `WALKTHROUGH.md`.
 
 ---
 
-## Extending the Project
+## Future Enhancements
 
 Some ideas for next steps:
 
