@@ -184,12 +184,12 @@ Contributions and experiments are welcome—this project is intended as a playgr
 
 ## License
 
-[Specify your license here, e.g., MIT, Apache 2.0]
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Contributing
 
-[Add contribution guidelines if applicable]
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
 ## Support
 
-For issues or questions, please [open an issue](link-to-issues) on the repository.
+For issues or questions, please [open an issue](../../issues) on the repository.
