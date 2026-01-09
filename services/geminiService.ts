@@ -1,8 +1,7 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { NutritionData, RecipeData, DietaryPreference } from "../types";
 
-const apiKey = process.env.GEMINI_API_KEY || process.env.API_KEY || '';
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
 const ai = new GoogleGenAI({ apiKey });
 
 /**
@@ -11,7 +10,7 @@ const ai = new GoogleGenAI({ apiKey });
  */
 export async function visionAgent(imageBase64: string): Promise<string[]> {
   const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
+    model: 'gemini-2.0-flash-exp',
     contents: [
       { inlineData: { mimeType: 'image/jpeg', data: imageBase64 } },
       {
@@ -41,7 +40,7 @@ export async function nutritionAnalyst(items: string[]): Promise<NutritionData> 
   Estimate portion sizes reasonably for a single meal. Return strictly JSON.`;
 
   const response = await ai.models.generateContent({
-    model: 'gemini-3-pro-preview',
+    model: 'gemini-2.0-flash-exp',
     contents: prompt,
     config: {
       responseMimeType: "application/json",
@@ -82,7 +81,7 @@ export async function culinaryExpert(items: string[], preference: DietaryPrefere
   Focus on high-quality flavor profile and easy preparation. Return strictly JSON.`;
 
   const response = await ai.models.generateContent({
-    model: 'gemini-3-pro-preview',
+    model: 'gemini-2.0-flash-exp',
     contents: prompt,
     config: {
       responseMimeType: "application/json",
