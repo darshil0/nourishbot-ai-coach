@@ -1,105 +1,174 @@
-import { GoogleGenAI, Type } from "@google/genai";
-import { NutritionData, RecipeData, DietaryPreference } from "../types";
+import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
+import { NutritionData, RecipeData, DietaryPreference } from '../types';
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
-const ai = new GoogleGenAI({ apiKey });
+
+if (!apiKey) {
+  console.error(
+    'VITE_GEMINI_API_KEY is not set. Please add it to your .env file.'
+  );
+}
+
+const genAI = new GoogleGenerativeAI(apiKey);
 
 /**
  * Agent 1: Vision Specialist
  * Analyzes image to identify food components.
  */
 export async function visionAgent(imageBase64: string): Promise<string[]> {
-  const response = await ai.models.generateContent({
-    model: 'gemini-2.0-flash-exp',
-    contents: [
-      { inlineData: { mimeType: 'image/jpeg', data: imageBase64 } },
+  try {
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+
+    const result = await model.generateContent([
       {
-        text:
-          "List every identifiable food ingredient or dish in this image. Return only a comma-separated list of items.",
+        inlineData: {
+          mimeType: 'image/jpeg',
+          data: imageBase64,
+        },
       },
-    ],
-  });
+      {
+        text: 'List every identifiable food ingredient or dish in this image. Return only a comma-separated list of items.',
+      },
+    ]);
 
-  const text = (response.text || "").trim();
-  if (!text) {
-    return [];
+    const response = await result.response;
+    const text = response.text().trim();
+
+    if (!text) {
+      return [];
+    }
+
+    return text
+      .split(',')
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+  } catch (error) {
+    console.error('Vision agent error:', error);
+    throw new Error('Failed to analyze image');
   }
-
-  return text
-    .split(',')
-    .map((s) => s.trim())
-    .filter((s) => s.length > 0);
 }
 
 /**
  * Agent 2: Nutrition Analyst
  * Calculates nutritional value based on identified items.
  */
-export async function nutritionAnalyst(items: string[]): Promise<NutritionData> {
-  const prompt = `Act as a senior nutritional scientist. Analyze this list of ingredients: ${items.join(', ')}. Provide a detailed nutritional breakdown. 
-  Estimate portion sizes reasonably for a single meal. Return strictly JSON.`;
+export async function nutritionAnalyst(
+  items: string[]
+): Promise<NutritionData> {
+  try {
+    const prompt = `Act as a senior nutritional scientist. Analyze this list of ingredients: ${items.join(
+      ', '
+    )}. Provide a detailed nutritional breakdown. 
+  Estimate portion sizes reasonably for a single meal. Return strictly JSON following the schema.`;
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-2.0-flash-exp',
-    contents: prompt,
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: Type.OBJECT,
-        properties: {
-          foodItems: { type: Type.ARRAY, items: { type: Type.STRING } },
-          totalCalories: { type: Type.NUMBER },
-          macros: {
-            type: Type.OBJECT,
-            properties: {
-              protein: { type: Type.NUMBER },
-              carbs: { type: Type.NUMBER },
-              fat: { type: Type.NUMBER }
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-2.0-flash-exp',
+      generationConfig: {
+        responseMimeType: 'application/json',
+        responseSchema: {
+          type: SchemaType.OBJECT,
+          properties: {
+            foodItems: {
+              type: SchemaType.ARRAY,
+              items: { type: SchemaType.STRING },
             },
-            required: ['protein', 'carbs', 'fat']
+            totalCalories: { type: SchemaType.NUMBER },
+            macros: {
+              type: SchemaType.OBJECT,
+              properties: {
+                protein: { type: SchemaType.NUMBER },
+                carbs: { type: SchemaType.NUMBER },
+                fat: { type: SchemaType.NUMBER },
+              },
+              required: ['protein', 'carbs', 'fat'],
+            },
+            micros: {
+              type: SchemaType.ARRAY,
+              items: { type: SchemaType.STRING },
+            },
+            healthScore: {
+              type: SchemaType.NUMBER,
+              description: 'Scale 1-100',
+            },
+            healthSummary: { type: SchemaType.STRING },
+            suggestions: {
+              type: SchemaType.ARRAY,
+              items: { type: SchemaType.STRING },
+            },
           },
-          micros: { type: Type.ARRAY, items: { type: Type.STRING } },
-          healthScore: { type: Type.NUMBER, description: "Scale 1-100" },
-          healthSummary: { type: Type.STRING },
-          suggestions: { type: Type.ARRAY, items: { type: Type.STRING } }
+          required: [
+            'foodItems',
+            'totalCalories',
+            'macros',
+            'healthScore',
+            'healthSummary',
+          ],
         },
-        required: ['foodItems', 'totalCalories', 'macros', 'healthScore', 'healthSummary']
-      }
-    }
-  });
+      },
+    });
 
-  return JSON.parse(response.text || '{}');
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+
+    return JSON.parse(text);
+  } catch (error) {
+    console.error('Nutrition analyst error:', error);
+    throw new Error('Failed to analyze nutrition');
+  }
 }
 
 /**
  * Agent 3: Culinary Expert
  * Generates a recipe based on ingredients and dietary preferences.
  */
-export async function culinaryExpert(items: string[], preference: DietaryPreference): Promise<RecipeData> {
-  const prompt = `Act as a world-class chef. Create a creative recipe using these items: ${items.join(', ')}. 
+export async function culinaryExpert(
+  items: string[],
+  preference: DietaryPreference
+): Promise<RecipeData> {
+  try {
+    const prompt = `Act as a world-class chef. Create a creative recipe using these items: ${items.join(
+      ', '
+    )}. 
   The recipe MUST follow these dietary restrictions: ${preference}. 
-  Focus on high-quality flavor profile and easy preparation. Return strictly JSON.`;
+  Focus on high-quality flavor profile and easy preparation. Return strictly JSON following the schema.`;
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-2.0-flash-exp',
-    contents: prompt,
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: Type.OBJECT,
-        properties: {
-          title: { type: Type.STRING },
-          description: { type: Type.STRING },
-          prepTime: { type: Type.STRING },
-          servings: { type: Type.NUMBER },
-          ingredients: { type: Type.ARRAY, items: { type: Type.STRING } },
-          instructions: { type: Type.ARRAY, items: { type: Type.STRING } },
-          dietaryTags: { type: Type.ARRAY, items: { type: Type.STRING } }
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-2.0-flash-exp',
+      generationConfig: {
+        responseMimeType: 'application/json',
+        responseSchema: {
+          type: SchemaType.OBJECT,
+          properties: {
+            title: { type: SchemaType.STRING },
+            description: { type: SchemaType.STRING },
+            prepTime: { type: SchemaType.STRING },
+            servings: { type: SchemaType.NUMBER },
+            ingredients: {
+              type: SchemaType.ARRAY,
+              items: { type: SchemaType.STRING },
+            },
+            instructions: {
+              type: SchemaType.ARRAY,
+              items: { type: SchemaType.STRING },
+            },
+            dietaryTags: {
+              type: SchemaType.ARRAY,
+              items: { type: SchemaType.STRING },
+            },
+          },
+          required: ['title', 'description', 'ingredients', 'instructions'],
         },
-        required: ['title', 'description', 'ingredients', 'instructions']
-      }
-    }
-  });
+      },
+    });
 
-  return JSON.parse(response.text || '{}');
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+
+    return JSON.parse(text);
+  } catch (error) {
+    console.error('Culinary expert error:', error);
+    throw new Error('Failed to generate recipe');
+  }
 }
