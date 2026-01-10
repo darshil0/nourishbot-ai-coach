@@ -30,7 +30,7 @@ const App: React.FC = () => {
     if (saved) {
       try {
         setHistory(JSON.parse(saved));
-      } catch (e) {
+      } catch (e: unknown) {
         console.error("Failed to parse history", e);
       }
     }
