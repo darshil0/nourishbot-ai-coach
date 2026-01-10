@@ -54,18 +54,18 @@ Data               Data
 ### Technology Stack
 
 **Frontend**
-- **React 18.3.1** - UI library with hooks
+- **React 19.2.3** - UI library with hooks
 - **TypeScript 5.8.3** - Type-safe development
-- **Vite 6.2.3** - Build tool and dev server
+- **Vite 7.3.1** - Build tool and dev server
 - **TailwindCSS 3.x** - Utility-first CSS (via CDN)
 
 **AI Integration**
-- **Google Generative AI 0.21.0** - Gemini API SDK
+- **@google/generative-ai 0.24.1** - Gemini API SDK
 - **Gemini 2.0 Flash Exp** - Vision and text generation model
 
 **Visualization**
-- **Recharts 2.13.3** - React charting library
-- **Lucide React 0.460.0** - Icon library
+- **Recharts 3.6.0** - React charting library
+- **lucide-react 0.562.0** - Icon library
 
 **Code Quality**
 - **ESLint 9.18.0** - Linting

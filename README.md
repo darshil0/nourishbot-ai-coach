@@ -2,9 +2,9 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
+![Version](https://img.shields.io/badge/version-1.1.0-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![React](https://img.shields.io/badge/React-18.3-blue.svg)
+![React](https://img.shields.io/badge/React-19-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)
 
 A multi-agent AI nutrition coach that turns food photos into rich nutritional insights and personalized recipes.
@@ -22,21 +22,24 @@ A multi-agent AI nutrition coach that turns food photos into rich nutritional in
 - 🍽️ **Recipe generation** – Auto-generated recipes tailored to dietary preferences (Vegan, Vegetarian, Gluten-Free, Keto, Paleo)
 - 🧠 **Multi-agent status feed** – Real-time progress tracking for vision, nutrition analyst, and culinary expert agents
 - 📜 **Local history log** – Revisit previous analyses/recipes, rename entries, and delete old ones
-- 💅 **Modern UI** – Tailwind-styled components with responsive layout and interactive charts
+- 💅 **Enhanced UI/UX** – Improved responsive layout, clearer recipe cards, and a more polished user experience.
 
 ---
 
 ## 🏗️ Architecture
 
 ### Front End
+
 Single-page application built with:
-- **React 18.3** + **TypeScript 5.8**
-- **Vite 6.2** for blazing-fast development
+
+- **React 19.2** + **TypeScript 5.8**
+- **Vite 7.3** for blazing-fast development
 - **TailwindCSS** for modern, responsive styling
 - **Lucide React** for beautiful icons
 - **Recharts** for data visualization
 
 ### Multi-Agent System
+
 Implemented using **Google Generative AI SDK** with three specialized agents:
 
 1. **Vision Agent** (`visionAgent`)  
@@ -49,7 +52,9 @@ Implemented using **Google Generative AI SDK** with three specialized agents:
    Generates creative recipes based on dietary preferences and available ingredients
 
 ### Orchestration
+
 The main orchestration in `App.tsx`:
+
 - User uploads an image
 - Vision agent detects ingredients
 - Based on workflow selection:
@@ -97,6 +102,7 @@ VITE_GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 > **⚠️ Security Warning:** This demo exposes the API key client-side for simplicity. For production:
+>
 > - Never expose API keys in client-side code
 > - Move API calls to a secure backend server
 > - Implement proper authentication and rate limiting
@@ -129,14 +135,14 @@ The production build will be created in the `dist/` directory.
 
 ## 🛠️ Available Scripts
 
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start development server with hot reload |
-| `npm run build` | Create optimized production build |
-| `npm run preview` | Preview production build locally |
-| `npm run lint` | Run ESLint to check code quality |
-| `npm run format` | Format code with Prettier |
-| `npm run format:check` | Check code formatting without writing |
+| Script                 | Description                              |
+| ---------------------- | ---------------------------------------- |
+| `npm run dev`          | Start development server with hot reload |
+| `npm run build`        | Create optimized production build        |
+| `npm run preview`      | Preview production build locally         |
+| `npm run lint`         | Run ESLint to check code quality         |
+| `npm run format`       | Format code with Prettier                |
+| `npm run format:check` | Check code formatting without writing    |
 
 ---
 
@@ -217,6 +223,7 @@ Copyright (c) 2026 Darshil Shah
 ## 🐛 Support
 
 For issues or questions:
+
 - [Open an issue](../../issues) on GitHub
 - Check existing issues for solutions
 - Review the [Walkthrough](./Walkthrough.MD) for technical details

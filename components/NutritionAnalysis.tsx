@@ -1,7 +1,13 @@
-
 import React from 'react';
 import { NutritionData } from '../types';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  Legend,
+} from 'recharts';
 
 interface Props {
   data: NutritionData;
@@ -20,7 +26,9 @@ export const NutritionAnalysis: React.FC<Props> = ({ data }) => {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-          <h3 className="text-lg font-bold text-slate-800 mb-4 text-center">Macro Distribution</h3>
+          <h3 className="text-lg font-bold text-slate-800 mb-4 text-center">
+            Macro Distribution
+          </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -33,23 +41,30 @@ export const NutritionAnalysis: React.FC<Props> = ({ data }) => {
                   paddingAngle={5}
                   dataKey="value"
                 >
-                  {chartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  {chartData.map((_, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip />
-                <Legend verticalAlign="bottom" height={36}/>
+                <Legend verticalAlign="bottom" height={36} />
               </PieChart>
             </ResponsiveContainer>
           </div>
           <div className="grid grid-cols-3 gap-2 text-center mt-2">
             <div>
               <div className="text-xs text-slate-500">Protein</div>
-              <div className="font-bold text-green-600">{data.macros.protein}g</div>
+              <div className="font-bold text-green-600">
+                {data.macros.protein}g
+              </div>
             </div>
             <div>
               <div className="text-xs text-slate-500">Carbs</div>
-              <div className="font-bold text-blue-600">{data.macros.carbs}g</div>
+              <div className="font-bold text-blue-600">
+                {data.macros.carbs}g
+              </div>
             </div>
             <div>
               <div className="text-xs text-slate-500">Fat</div>
@@ -61,14 +76,24 @@ export const NutritionAnalysis: React.FC<Props> = ({ data }) => {
         <div className="bg-gradient-to-br from-emerald-500 via-green-500 to-emerald-600 p-6 rounded-2xl shadow-sm text-white flex flex-col justify-center items-center text-center relative overflow-hidden">
           <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top,_white,_transparent_60%)]" />
           <div className="relative z-10 w-full">
-            <div className="text-sm font-semibold text-emerald-50 uppercase tracking-widest mb-2">Total Calories</div>
-            <div className="text-6xl font-black text-white drop-shadow-sm">{data.totalCalories}</div>
-            <div className="text-sm text-emerald-50/90 mt-2">kcal estimated</div>
+            <div className="text-sm font-semibold text-emerald-50 uppercase tracking-widest mb-2">
+              Total Calories
+            </div>
+            <div className="text-6xl font-black text-white drop-shadow-sm">
+              {data.totalCalories}
+            </div>
+            <div className="text-sm text-emerald-50/90 mt-2">
+              kcal estimated
+            </div>
 
             <div className="mt-8 w-full">
               <div className="flex justify-between mb-1">
-                <span className="text-xs font-medium text-emerald-50">Health Score</span>
-                <span className="text-xs font-medium text-emerald-50">{data.healthScore}/100</span>
+                <span className="text-xs font-medium text-emerald-50">
+                  Health Score
+                </span>
+                <span className="text-xs font-medium text-emerald-50">
+                  {data.healthScore}/100
+                </span>
               </div>
               <div className="w-full bg-emerald-900/30 rounded-full h-2.5 overflow-hidden">
                 <div
@@ -84,21 +109,33 @@ export const NutritionAnalysis: React.FC<Props> = ({ data }) => {
       <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
         <h3 className="text-lg font-bold text-slate-800 mb-4">Meal Insights</h3>
         <p className="text-slate-600 mb-6 italic">"{data.healthSummary}"</p>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <h4 className="text-sm font-bold text-slate-400 uppercase mb-3">Micronutrients</h4>
+            <h4 className="text-sm font-bold text-slate-400 uppercase mb-3">
+              Micronutrients
+            </h4>
             <div className="flex flex-wrap gap-2">
               {data.micros.map((m, i) => (
-                <span key={i} className="px-3 py-1 bg-slate-50 text-slate-600 rounded-full text-xs border border-slate-100">{m}</span>
+                <span
+                  key={i}
+                  className="px-3 py-1 bg-slate-50 text-slate-600 rounded-full text-xs border border-slate-100"
+                >
+                  {m}
+                </span>
               ))}
             </div>
           </div>
           <div>
-            <h4 className="text-sm font-bold text-slate-400 uppercase mb-3">Chef's Suggestions</h4>
+            <h4 className="text-sm font-bold text-slate-400 uppercase mb-3">
+              Chef's Suggestions
+            </h4>
             <ul className="space-y-2">
               {data.suggestions.map((s, i) => (
-                <li key={i} className="text-sm text-slate-600 flex items-start gap-2">
+                <li
+                  key={i}
+                  className="text-sm text-slate-600 flex items-start gap-2"
+                >
                   <span className="text-green-500 mt-1">•</span> {s}
                 </li>
               ))}

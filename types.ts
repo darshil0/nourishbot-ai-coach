@@ -1,7 +1,6 @@
-
 export enum Workflow {
   ANALYSIS = 'ANALYSIS',
-  RECIPE = 'RECIPE'
+  RECIPE = 'RECIPE',
 }
 
 export enum DietaryPreference {
@@ -10,7 +9,7 @@ export enum DietaryPreference {
   VEGETARIAN = 'Vegetarian',
   GLUTEN_FREE = 'Gluten-Free',
   KETO = 'Keto',
-  PALEO = 'Paleo'
+  PALEO = 'Paleo',
 }
 
 export interface MacroNutrients {
