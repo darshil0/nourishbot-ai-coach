@@ -1,195 +1,241 @@
 # NourishBot AI Coach
 
-NourishBot is a multi-agent AI nutrition coach that turns food photos into rich nutritional insights and personalized recipes.
+<div align="center">
 
-It is designed as a demo-quality app that showcases:
+![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![React](https://img.shields.io/badge/React-18.3-blue.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)
 
-- Coordinated **multi-agent workflows** (vision → nutrition analysis → recipe generation)
-- **Structured JSON outputs** from Gemini models mapped directly into TypeScript types
-- A polished **React + TypeScript** front end with charts, history, and inline editing
+A multi-agent AI nutrition coach that turns food photos into rich nutritional insights and personalized recipes.
 
----
+[Features](#features) • [Getting Started](#getting-started) • [Documentation](#documentation) • [Contributing](#contributing)
 
-## Table of Contents
-
-- [Features](#features)
-- [Architecture](#architecture)
-- [Prerequisites](#prerequisites)
-- [Getting Started](#getting-started)
-- [Configuration](#configuration)
-- [Available Scripts](#available-scripts)
-- [Key Files & Folders](#key-files--folders)
-- [Data & Privacy Notes](#data--privacy-notes)
-- [Future Enhancements](#future-enhancements)
+</div>
 
 ---
 
-## Features
+## 🌟 Features
 
-- 📷 **Image-based meal analysis** – upload a photo of your meal and let the vision agent detect ingredients.
-- 📊 **Nutrition breakdown** – estimated calories, macro distribution, micros, health score, and suggestions.
-- 🍽️ **Recipe generation** – auto-generated recipes tailored to dietary preferences (None, Vegan, Vegetarian, Gluten-Free, Keto, Paleo).
-- 🧠 **Multi-agent status feed** – see each agent's progress (vision, nutrition analyst, culinary expert) in real time.
-- 📜 **Local history log** – revisit previous analyses/recipes, rename entries, and delete old ones.
-- 💅 **Modern UI** – Tailwind-styled components, responsive layout, and interactive charts.
-
----
-
-## Architecture
-
-**Front End**
-
-- Single-page application built with **React + TypeScript** and bundled by **Vite**.
-- UI uses **TailwindCSS** via CDN (`index.html`), **Lucide React** for icons, and **Recharts** for data visualization.
-
-**Multi-Agent Client**
-
-Implemented in `services/geminiService.ts` using **@google/genai** with client-side API calls:
-
-- `visionAgent(imageBase64)`  
-  Takes a base64-encoded JPEG, asks Gemini to return a comma-separated list of ingredients, and converts it into `string[]`.
-- `nutritionAnalyst(items)`  
-  Given a list of ingredients, prompts Gemini to return structured JSON matching the `NutritionData` TypeScript type.
-- `culinaryExpert(items, preference)`  
-  Asks Gemini for a recipe (JSON) that abides by the specified `DietaryPreference`, matching the `RecipeData` type.
-
-**Orchestration**
-
-The main orchestration lives in `App.tsx`:
-
-1. User uploads an image.
-2. `visionAgent` detects ingredients.
-3. Depending on the selected workflow:
-   - **Analysis** → call `nutritionAnalyst` and render `NutritionAnalysis`.
-   - **Recipe** → quick nutrition scan → `culinaryExpert` → render `RecipeCard`.
-4. Each run is logged to `localStorage` as a `HistoryItem` and shown in `HistoryLog`.
+- 📷 **Image-based meal analysis** – Upload a photo and let the vision agent detect ingredients
+- 📊 **Nutrition breakdown** – Estimated calories, macro distribution, micros, health score, and suggestions
+- 🍽️ **Recipe generation** – Auto-generated recipes tailored to dietary preferences (Vegan, Vegetarian, Gluten-Free, Keto, Paleo)
+- 🧠 **Multi-agent status feed** – Real-time progress tracking for vision, nutrition analyst, and culinary expert agents
+- 📜 **Local history log** – Revisit previous analyses/recipes, rename entries, and delete old ones
+- 💅 **Modern UI** – Tailwind-styled components with responsive layout and interactive charts
 
 ---
 
-## Prerequisites
+## 🏗️ Architecture
 
-To build and run locally you will need:
+### Front End
+Single-page application built with:
+- **React 18.3** + **TypeScript 5.8**
+- **Vite 6.2** for blazing-fast development
+- **TailwindCSS** for modern, responsive styling
+- **Lucide React** for beautiful icons
+- **Recharts** for data visualization
 
-- [Node.js](https://nodejs.org/) (LTS or newer)
-- `npm` (bundled with Node)
-- A **Gemini API key** from [Google AI Studio](https://aistudio.google.com/app/apikey)
+### Multi-Agent System
+Implemented using **Google Generative AI SDK** with three specialized agents:
+
+1. **Vision Agent** (`visionAgent`)  
+   Analyzes meal images to identify food components and ingredients
+
+2. **Nutrition Analyst** (`nutritionAnalyst`)  
+   Calculates detailed nutritional breakdown with macros, micros, and health scoring
+
+3. **Culinary Expert** (`culinaryExpert`)  
+   Generates creative recipes based on dietary preferences and available ingredients
+
+### Orchestration
+The main orchestration in `App.tsx`:
+- User uploads an image
+- Vision agent detects ingredients
+- Based on workflow selection:
+  - **Analysis mode** → Nutrition analyst provides detailed breakdown
+  - **Recipe mode** → Culinary expert creates personalized recipe
+- Results are logged to localStorage and rendered in beautiful UI components
 
 ---
 
-## Getting Started
+## 📋 Prerequisites
 
-Clone the repository, install dependencies, and start the dev server:
+- [Node.js](https://nodejs.org/) (LTS version 18.x or newer)
+- `npm` (bundled with Node.js)
+- **Google Gemini API key** from [Google AI Studio](https://aistudio.google.com/app/apikey)
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the Repository
 
 ```bash
 git clone <repository-url>
 cd nourishbot-ai-coach
-npm install
-npm run dev
 ```
 
-Vite will print a local URL (typically `http://localhost:5173`) – open it in your browser to use the app.
+### 2. Install Dependencies
 
-> **Note:** If `npm` is not recognized on your machine, install Node.js first and restart your terminal.
+```bash
+npm install
+```
 
----
-
-## Configuration
-
-### Environment Variables
+### 3. Configure Environment Variables
 
 Create a `.env` file in the project root:
 
 ```bash
+cp .env.example .env
+```
+
+Edit `.env` and add your Gemini API key:
+
+```env
 VITE_GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
-**Important:** Vite requires the `VITE_` prefix for environment variables to be accessible in client-side code.
+> **⚠️ Security Warning:** This demo exposes the API key client-side for simplicity. For production:
+> - Never expose API keys in client-side code
+> - Move API calls to a secure backend server
+> - Implement proper authentication and rate limiting
 
-The Gemini service reads the API key as:
+### 4. Start Development Server
 
-```ts
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
+```bash
+npm run dev
 ```
 
-### ⚠️ Security Warning
+Vite will start the dev server at `http://localhost:5173`
 
-**This demo exposes the API key client-side for simplicity.** In production applications:
-
-- **Never expose API keys in client-side code**
-- Move Gemini API calls to a secure backend server
-- Use environment variables only on the server
-- Implement proper authentication and rate limiting
-
----
-
-## Available Scripts
-
-All scripts are defined in `package.json`:
-
-- `npm run dev` – start the Vite dev server (default: http://localhost:5173).
-- `npm run build` – create a production build in `dist/`.
-- `npm run preview` – preview the production build using Vite's preview server.
-
-To serve a production build with your own static server:
+### 5. Build for Production
 
 ```bash
 npm run build
-# then serve ./dist with any static file server
+```
+
+The production build will be created in the `dist/` directory.
+
+---
+
+## 📚 Documentation
+
+- [Detailed Walkthrough](./Walkthrough.MD) - In-depth technical guide
+- [Changelog](./CHANGELOG.md) - Version history and updates
+- [API Documentation](#api-documentation) - Gemini service details
+
+---
+
+## 🛠️ Available Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start development server with hot reload |
+| `npm run build` | Create optimized production build |
+| `npm run preview` | Preview production build locally |
+| `npm run lint` | Run ESLint to check code quality |
+| `npm run format` | Format code with Prettier |
+| `npm run format:check` | Check code formatting without writing |
+
+---
+
+## 📁 Project Structure
+
+```
+nourishbot-ai-coach/
+├── src/
+│   ├── components/
+│   │   ├── AgentStatus.tsx      # Multi-agent timeline UI
+│   │   ├── HistoryLog.tsx       # Past analyses list
+│   │   ├── NutritionAnalysis.tsx # Nutrition breakdown view
+│   │   └── RecipeCard.tsx       # Recipe display component
+│   ├── services/
+│   │   └── geminiService.ts     # Gemini AI integration
+│   ├── App.tsx                  # Main application component
+│   ├── index.tsx                # React entry point
+│   └── types.ts                 # TypeScript type definitions
+├── public/
+├── .env.example                 # Environment variables template
+├── index.html                   # HTML entry point
+├── package.json                 # Dependencies and scripts
+├── tsconfig.json               # TypeScript configuration
+├── vite.config.ts              # Vite configuration
+├── README.md                   # This file
+├── CHANGELOG.md                # Version history
+└── Walkthrough.MD              # Technical guide
 ```
 
 ---
 
-## Key Files & Folders
+## 🔐 Data & Privacy
 
-- `App.tsx` – main application shell and multi-agent orchestration logic.
-- `index.tsx` – React entry point that mounts `<App />`.
-- `index.html` – HTML shell, Tailwind CDN config, and import map for ESM dependencies.
-- `services/geminiService.ts` – Gemini agents: vision, nutrition analysis, and recipe generation.
-- `types.ts` – TypeScript enums and interfaces (`Workflow`, `DietaryPreference`, `NutritionData`, `RecipeData`, etc.).
-- `components/AgentStatus.tsx` – live agent log UI.
-- `components/NutritionAnalysis.tsx` – macros chart, calories, health score, insights.
-- `components/RecipeCard.tsx` – recipe layout.
-- `components/HistoryLog.tsx` – list of previous runs with rename/delete actions.
-- `metadata.json` – high-level app metadata (used by host environments that read it).
+- **Local Storage**: Analysis and recipe history stored in browser's `localStorage`
+- **Image Processing**: Images sent to Google Gemini API for analysis
+- **No Server Storage**: No data is stored on any backend server
+- **API Key Security**: Current implementation exposes API key client-side (demo only)
 
-For a deeper technical tour, see `WALKTHROUGH.md`.
+> **Important:** Do not use this app with sensitive or private photos. For production use, implement proper backend API proxy.
 
 ---
 
-## Data & Privacy Notes
+## 🎯 Future Enhancements
 
-- The app stores analysis and recipe history **locally** in `localStorage` under the key `nourishbot_history`.
-- Images are sent to Gemini for analysis; **do not use this app with sensitive or private photos**.
-- **API Key Exposure:** The Gemini API key is currently injected client-side for demo purposes. Anyone can view it in the browser's developer tools. 
-  - For production use, implement a backend proxy to handle API calls securely.
-  - Never commit `.env` files with real API keys to version control.
-  - Add `.env` to your `.gitignore` file.
-
----
-
-## Future Enhancements
-
-Some ideas for next steps:
-
-- Add more `DietaryPreference` options (e.g., Low-FODMAP, Diabetic-friendly) and wire them through prompts and UI.
-- Introduce a new "substitution" agent that suggests healthier or allergy-safe alternatives.
-- Add user accounts and server-side persistence for history instead of `localStorage`.
-- Implement analytics/logging to monitor how often each workflow is used and how agents perform.
-- Integrate additional charts (e.g., week-over-week macro trends using the history log).
-- **Secure the API:** Move Gemini calls to a backend service to protect API keys and add authentication.
-
-Contributions and experiments are welcome—this project is intended as a playground for multi-agent AI UX patterns.
+- [ ] Add more dietary preferences (Low-FODMAP, Diabetic-friendly)
+- [ ] Implement meal substitution suggestions
+- [ ] Add user accounts with cloud storage
+- [ ] Weekly macro trend analytics
+- [ ] Mobile app versions (iOS/Android)
+- [ ] Secure backend API proxy
+- [ ] Barcode scanning for packaged foods
+- [ ] Integration with fitness trackers
 
 ---
 
-## License
+## 🤝 Contributing
+
+Contributions are welcome! Here's how you can help:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+For major changes, please open an issue first to discuss what you would like to change.
+
+---
+
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Contributing
+Copyright (c) 2026 Darshil Shah
 
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+---
 
-## Support
+## 🐛 Support
 
-For issues or questions, please [open an issue](../../issues) on the repository.
+For issues or questions:
+- [Open an issue](../../issues) on GitHub
+- Check existing issues for solutions
+- Review the [Walkthrough](./Walkthrough.MD) for technical details
+
+---
+
+## 🙏 Acknowledgments
+
+- **Google Gemini AI** for powerful vision and language models
+- **React Team** for the amazing UI library
+- **Tailwind CSS** for beautiful, utility-first styling
+- **Recharts** for elegant data visualization
+
+---
+
+<div align="center">
+
+Made with ❤️ by [Darshil Shah](https://github.com/darshilshah)
+
+**[⬆ back to top](#nourishbot-ai-coach)**
+
+</div>
