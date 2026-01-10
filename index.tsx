@@ -1,14 +1,20 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
-  throw new Error("Could not find root element to mount to");
+  throw new Error('Could not find root element to mount to');
 }
 
-const root = ReactDOM.createRoot(rootElement);
+const root = ReactDOM.createRoot(rootElement, {
+  onUncaughtError: (error, errorInfo) => {
+    console.error('Uncaught Error:', error, errorInfo);
+  },
+  onCaughtError: (error, errorInfo) => {
+    console.error('Caught Error:', error, errorInfo);
+  },
+});
 root.render(
   <React.StrictMode>
     <App />

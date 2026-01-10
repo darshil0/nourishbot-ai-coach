@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AgentLog } from '../types';
 import { Activity, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
@@ -28,7 +27,8 @@ export const AgentStatus: React.FC<AgentStatusProps> = ({ logs }) => {
       {isEmpty && (
         <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-500 flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
-          Agents are idle. Upload a meal and start analysis to see the pipeline come alive.
+          Agents are idle. Upload a meal and start analysis to see the pipeline
+          come alive.
         </div>
       )}
       {!isEmpty && (
@@ -38,12 +38,20 @@ export const AgentStatus: React.FC<AgentStatusProps> = ({ logs }) => {
               <div className="mt-0.5">{icons[log.status]}</div>
               <div className="flex-1">
                 <div className="flex justify-between items-center">
-                  <span className="font-semibold text-slate-800 text-sm">{log.agentName}</span>
+                  <span className="font-semibold text-slate-800 text-sm">
+                    {log.agentName}
+                  </span>
                   <span className="text-[10px] text-slate-400">
-                    {log.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                    {log.timestamp.toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                    })}
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 leading-relaxed">{log.message}</p>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  {log.message}
+                </p>
               </div>
             </div>
           ))}

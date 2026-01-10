@@ -5,6 +5,28 @@ All notable changes to NourishBot AI Coach will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2024-01-11
+
+### Added
+- Created `CHANGELOG.md` to track changes.
+- Added tooltip to the "Analysis" button for better UX.
+
+### Changed
+- Updated all dependencies to their latest versions, including React 19 and Vite 7.
+- Migrated ESLint configuration to the new flat `eslint.config.js` format.
+- Redesigned the `RecipeCard.tsx` component for improved readability.
+- Made the footer responsive.
+- Updated `README.md` and `Walkthrough.MD` with the latest information.
+
+### Fixed
+- Resolved numerous linting issues, including `no-explicit-any` and deprecated Prettier options.
+- Fixed a bug where the application would render a blank white screen due to a missing script tag in `index.html` and incorrect environment variable handling.
+- Corrected various TypeScript errors that were preventing a successful build.
+- Removed unused variables from `vite.config.ts`.
+
+### Removed
+- Removed a non-functional button from the UI.
+
 ## [1.0.0] - 2026-01-10
 
 ### 🎉 Initial Release

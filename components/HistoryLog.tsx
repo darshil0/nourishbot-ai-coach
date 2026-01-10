@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-import {
-  HistoryItem,
-  Workflow,
-  NutritionData,
-  RecipeData,
-} from '../types';
+import { HistoryItem, Workflow, NutritionData, RecipeData } from '../types';
 import {
   History,
   Trash2,
@@ -51,7 +46,7 @@ export const HistoryLog: React.FC<Props> = ({
     setEditValue(item.label);
   };
 
-  const cancelEditing = (e: React.MouseEvent) => {
+  const cancelEditing = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.stopPropagation();
     setEditingId(null);
     setEditValue('');
@@ -143,7 +138,7 @@ export const HistoryLog: React.FC<Props> = ({
                         onChange={(e) => setEditValue(e.target.value)}
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') handleSave(e, item.id);
-                          if (e.key === 'Escape') cancelEditing(e as any);
+                          if (e.key === 'Escape') cancelEditing(e);
                         }}
                         onClick={(e) => e.stopPropagation()}
                         aria-label="Edit label"
