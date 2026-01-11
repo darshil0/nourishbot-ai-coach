@@ -2,6 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { geminiProxyMiddleware } from './server/middleware';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -11,7 +12,15 @@ export default defineConfig(() => {
       port: 5173,
       host: '0.0.0.0',
     },
-    plugins: [react()],
+    plugins: [
+      react(),
+      {
+        name: 'gemini-proxy',
+        configureServer(server) {
+          server.middlewares.use(geminiProxyMiddleware);
+        },
+      },
+    ],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),

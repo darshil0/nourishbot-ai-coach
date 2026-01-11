@@ -26,29 +26,35 @@ A comprehensive technical guide to understanding and extending the multi-agent n
 ### High-Level Flow
 
 ```
-User Upload Image
+User Upload Image (Client)
+       │
+       ├─ POST /api/generate with { agent: 'vision', payload: { imageBase64 } }
+       │
        ↓
-Vision Agent (Gemini 2.0 Flash)
+Backend Proxy (Server)
+       │
+       ├─ Receives request
+       ├─ Calls Vision Agent (Gemini 2.0 Flash) with secure API key
+       │
        ↓
-Ingredients List
+Ingredients List (Client)
+       │
+       ├─ POST /api/generate with { agent: 'nutrition'/'recipe', payload: { ... } }
+       │
        ↓
-   Workflow Branch
+Backend Proxy (Server)
+       │
+       ├─ Receives request
+       ├─ Calls Nutrition/Culinary Agent with secure API key
+       │
        ↓
-   ┌───────────────────┐
-   ↓                   ↓
-Analysis            Recipe
-   ↓                   ↓
-Nutrition          Nutrition + Culinary
-Analyst            Analyst    Expert
-   ↓                   ↓
-Nutrition          Recipe
-Data               Data
-   ↓                   ↓
-   └───────────────────┘
-           ↓
-    UI Rendering
-           ↓
-    Save to History
+Nutrition/Recipe Data (Client)
+       │
+       ├─ UI Rendering
+       ├─ Save to History
+       │
+       ↓
+End
 ```
 
 ### Technology Stack
@@ -223,153 +229,41 @@ Each agent follows this pattern:
 
 ## 4. Gemini AI Integration
 
-Located in `services/geminiService.ts`, this file handles all AI interactions.
+All AI interactions are now handled by a secure backend proxy. The frontend communicates with this proxy, which then makes the actual calls to the Gemini API.
 
-### SDK Initialization
+### Backend Proxy (`server/middleware.ts`)
 
-```typescript
-import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
+- **Endpoint**: `/api/generate`
+- **Method**: `POST`
+- **Authentication**: The `GEMINI_API_KEY` is loaded from server-side environment variables and is never exposed to the client.
 
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
-const genAI = new GoogleGenerativeAI(apiKey);
-```
+The proxy handles three types of agents: `vision`, `nutrition`, and `recipe`. It dynamically calls the appropriate Gemini model based on the `agent` specified in the request body.
 
-### Agent 1: Vision Specialist
+### Frontend Service (`services/geminiService.ts`)
 
-**Purpose**: Identify food items from images
-
-```typescript
-export async function visionAgent(imageBase64: string): Promise<string[]> {
-  const model = genAI.getGenerativeModel({ 
-    model: 'gemini-2.0-flash-exp' 
-  });
-
-  const result = await model.generateContent([
-    {
-      inlineData: {
-        mimeType: 'image/jpeg',
-        data: imageBase64,
-      },
-    },
-    {
-      text: 'List every identifiable food ingredient or dish in this image. Return only a comma-separated list of items.',
-    },
-  ]);
-
-  const response = await result.response;
-  const text = response.text().trim();
-
-  return text.split(',').map(s => s.trim()).filter(s => s.length > 0);
-}
-```
-
-**Key Points**:
-- Uses multimodal input (image + text)
-- Simple prompt for comma-separated list
-- Post-processes response into array
-
-### Agent 2: Nutrition Analyst
-
-**Purpose**: Calculate detailed nutritional breakdown
+The frontend service has been refactored to use the backend proxy. It no longer contains the Gemini SDK or the API key. Instead, it makes `fetch` requests to the `/api/generate` endpoint.
 
 ```typescript
-export async function nutritionAnalyst(
-  items: string[]
-): Promise<NutritionData> {
-  const prompt = `Act as a senior nutritional scientist. Analyze this list of ingredients: ${items.join(', ')}. Provide a detailed nutritional breakdown. Estimate portion sizes reasonably for a single meal.`;
-
-  const model = genAI.getGenerativeModel({
-    model: 'gemini-2.0-flash-exp',
-    generationConfig: {
-      responseMimeType: 'application/json',
-      responseSchema: {
-        type: SchemaType.OBJECT,
-        properties: {
-          foodItems: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING }},
-          totalCalories: { type: SchemaType.NUMBER },
-          macros: {
-            type: SchemaType.OBJECT,
-            properties: {
-              protein: { type: SchemaType.NUMBER },
-              carbs: { type: SchemaType.NUMBER },
-              fat: { type: SchemaType.NUMBER }
-            },
-            required: ['protein', 'carbs', 'fat']
-          },
-          // ... more properties
+async function callProxy(agent: string, payload: any) {
+    const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
         },
-        required: ['foodItems', 'totalCalories', 'macros', 'healthScore', 'healthSummary']
-      }
+        body: JSON.stringify({ agent, payload }),
+    });
+
+    if (!response.ok) {
+        const errorBody = await response.json();
+        throw new Error(errorBody.error || 'API request failed');
     }
-  });
 
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  return JSON.parse(response.text());
+    const result = await response.json();
+    return JSON.parse(result.text);
 }
 ```
 
-**Key Points**:
-- Uses structured output with JSON schema
-- Schema enforces TypeScript interface shape
-- No need for manual parsing/validation
-
-### Agent 3: Culinary Expert
-
-**Purpose**: Generate creative, diet-specific recipes
-
-```typescript
-export async function culinaryExpert(
-  items: string[],
-  preference: DietaryPreference
-): Promise<RecipeData> {
-  const prompt = `Act as a world-class chef. Create a creative recipe using these items: ${items.join(', ')}. The recipe MUST follow these dietary restrictions: ${preference}. Focus on high-quality flavor profile and easy preparation.`;
-
-  const model = genAI.getGenerativeModel({
-    model: 'gemini-2.0-flash-exp',
-    generationConfig: {
-      responseMimeType: 'application/json',
-      responseSchema: {
-        type: SchemaType.OBJECT,
-        properties: {
-          title: { type: SchemaType.STRING },
-          description: { type: SchemaType.STRING },
-          prepTime: { type: SchemaType.STRING },
-          servings: { type: SchemaType.NUMBER },
-          ingredients: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING }},
-          instructions: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING }},
-          dietaryTags: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING }}
-        },
-        required: ['title', 'description', 'ingredients', 'instructions']
-      }
-    }
-  });
-
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  return JSON.parse(response.text());
-}
-```
-
-**Key Points**:
-- Incorporates dietary preferences in prompt
-- Returns structured recipe format
-- Includes steps and metadata
-
-### Error Handling Pattern
-
-All agents follow this error handling pattern:
-
-```typescript
-try {
-  // API call
-  const result = await model.generateContent(/* ... */);
-  return processedData;
-} catch (error) {
-  console.error('Agent name error:', error);
-  throw new Error('User-friendly error message');
-}
-```
+This setup ensures that the API key is never exposed to the client, significantly improving the security of the application.
 
 ---
 
@@ -979,26 +873,18 @@ Verify import:
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
 ```
 
-#### 2. API Calls Fail with 400 Error
+#### 2. API Calls Fail with 400/500 Error
 
 **Causes**:
-- Invalid API key
-- Incorrect schema
-- Rate limiting
+- **Invalid API Key**: The `GEMINI_API_KEY` in your `.env` file is missing or incorrect.
+- **Incorrect Schema**: The frontend is sending a malformed request to the backend proxy.
+- **Rate Limiting**: You have exceeded the Gemini API rate limits.
+- **Backend Proxy Error**: The `server/middleware.ts` has a bug.
 
 **Solutions**:
-```typescript
-// Verify API key
-console.log('API Key exists:', !!import.meta.env.VITE_GEMINI_API_KEY);
-
-// Add error logging
-catch (error) {
-  console.error('Full error:', error);
-  if (error.response) {
-    console.error('Response:', error.response.data);
-  }
-}
-```
+- **Check Server Logs**: The Vite development server will now print any errors from the backend proxy. Look for messages like "GEMINI_API_KEY is not defined" or other errors.
+- **Verify `.env` File**: Ensure your `.env` file is in the root of the project and that `GEMINI_API_KEY` is set correctly.
+- **Restart Server**: If you've recently changed your `.env` file, restart the Vite server.
 
 #### 3. History Not Persisting
 

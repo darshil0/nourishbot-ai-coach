@@ -98,14 +98,8 @@ cp .env.example .env
 Edit `.env` and add your Gemini API key:
 
 ```env
-VITE_GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
-
-> **⚠️ Security Warning:** This demo exposes the API key client-side for simplicity. For production:
->
-> - Never expose API keys in client-side code
-> - Move API calls to a secure backend server
-> - Implement proper authentication and rate limiting
 
 ### 4. Start Development Server
 
@@ -150,6 +144,8 @@ The production build will be created in the `dist/` directory.
 
 ```
 nourishbot-ai-coach/
+├── server/
+│   └── middleware.ts          # Backend proxy for secure API calls
 ├── src/
 │   ├── components/
 │   │   ├── AgentStatus.tsx      # Multi-agent timeline UI
@@ -177,11 +173,9 @@ nourishbot-ai-coach/
 ## 🔐 Data & Privacy
 
 - **Local Storage**: Analysis and recipe history stored in browser's `localStorage`
-- **Image Processing**: Images sent to Google Gemini API for analysis
-- **No Server Storage**: No data is stored on any backend server
-- **API Key Security**: Current implementation exposes API key client-side (demo only)
-
-> **Important:** Do not use this app with sensitive or private photos. For production use, implement proper backend API proxy.
+- **Image Processing**: Images are securely processed on the server-side proxy.
+- **No Server Storage**: No data is stored on any backend server.
+- **API Key Security**: The Gemini API key is securely stored and used on the server, never exposed to the client.
 
 ---
 
@@ -216,7 +210,7 @@ For major changes, please open an issue first to discuss what you would like to 
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-Copyright (c) 2026 Darshil Shah
+Copyright (c) 2024 Darshil Shah
 
 ---
 
