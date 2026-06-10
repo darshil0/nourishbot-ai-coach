@@ -22,7 +22,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [1.1.1] — 2024-05-22
+## [1.1.1] — 2026-06-10
 
 ### Added
 - Secure backend proxy for Gemini API calls, removing sensitive logic from the client.
