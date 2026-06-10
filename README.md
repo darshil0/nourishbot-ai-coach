@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.1.0-green.svg)
+![Version](https://img.shields.io/badge/version-1.1.1-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![React](https://img.shields.io/badge/React-19-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)
@@ -146,26 +146,24 @@ The production build will be created in the `dist/` directory.
 nourishbot-ai-coach/
 ├── server/
 │   └── middleware.ts          # Backend proxy for secure API calls
-├── src/
-│   ├── components/
-│   │   ├── AgentStatus.tsx      # Multi-agent timeline UI
-│   │   ├── HistoryLog.tsx       # Past analyses list
-│   │   ├── NutritionAnalysis.tsx # Nutrition breakdown view
-│   │   └── RecipeCard.tsx       # Recipe display component
-│   ├── services/
-│   │   └── geminiService.ts     # Gemini AI integration
-│   ├── App.tsx                  # Main application component
-│   ├── index.tsx                # React entry point
-│   └── types.ts                 # TypeScript type definitions
-├── public/
-├── .env.example                 # Environment variables template
-├── index.html                   # HTML entry point
-├── package.json                 # Dependencies and scripts
-├── tsconfig.json               # TypeScript configuration
-├── vite.config.ts              # Vite configuration
-├── README.md                   # This file
-├── CHANGELOG.md                # Version history
-└── Walkthrough.MD              # Technical guide
+├── components/
+│   ├── AgentStatus.tsx      # Multi-agent timeline UI
+│   ├── HistoryLog.tsx       # Past analyses list
+│   ├── NutritionAnalysis.tsx # Nutrition breakdown view
+│   └── RecipeCard.tsx       # Recipe display component
+├── services/
+│   └── geminiService.ts     # Gemini AI integration
+├── App.tsx                  # Main application component
+├── index.tsx                # React entry point
+├── types.ts                 # TypeScript type definitions
+├── .env.example             # Environment variables template
+├── index.html               # HTML entry point
+├── package.json             # Dependencies and scripts
+├── tsconfig.json            # TypeScript configuration
+├── vite.config.ts           # Vite configuration
+├── README.md                # This file
+├── CHANGELOG.md             # Version history
+└── Walkthrough.MD           # Technical guide
 ```
 
 ---
