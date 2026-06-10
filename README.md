@@ -17,15 +17,11 @@ A multi-agent AI nutrition coach that turns food photos into rich nutritional in
 
 ## Features
 
-**Image-based meal analysis** — Upload a food photo and a vision agent identifies ingredients automatically.
-
-**Nutritional breakdown** — Get estimated calories, macro and micronutrient distribution, a health score, and improvement suggestions.
-
-**Recipe generation** — The culinary agent creates recipes tailored to your dietary preference: Vegan, Vegetarian, Gluten-Free, Keto, or Paleo.
-
-**Multi-agent status feed** — A real-time timeline shows progress across the vision, nutrition, and culinary agents as they work.
-
-**Local history log** — Browse, rename, and delete previous analyses and recipes stored in your browser.
+**Image-based meal analysis**: Upload a food photo and a vision agent identifies ingredients automatically.
+**Nutritional breakdown**: Get estimated calories, macro and micronutrient distribution, a health score, and improvement suggestions.
+**Recipe generation**: The culinary agent creates recipes tailored to your dietary preference: Vegan, Vegetarian, Gluten-Free, Keto, or Paleo.
+**Multi-agent status feed**:A real-time timeline shows progress across the vision, nutrition, and culinary agents as they work.
+**Local history log**: Browse, rename, and delete previous analyses and recipes stored in your browser.
 
 ---
 
