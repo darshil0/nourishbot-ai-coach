@@ -9,232 +9,194 @@
 
 A multi-agent AI nutrition coach that turns food photos into rich nutritional insights and personalized recipes.
 
-[Features](#features) • [Getting Started](#getting-started) • [Documentation](#documentation) • [Contributing](#contributing)
+[Features](#features) · [Getting Started](#getting-started) · [Project Structure](#project-structure) · [Contributing](#contributing)
 
 </div>
 
 ---
 
-## 🌟 Features
+## Features
 
-- 📷 **Image-based meal analysis** – Upload a photo and let the vision agent detect ingredients
-- 📊 **Nutrition breakdown** – Estimated calories, macro distribution, micros, health score, and suggestions
-- 🍽️ **Recipe generation** – Auto-generated recipes tailored to dietary preferences (Vegan, Vegetarian, Gluten-Free, Keto, Paleo)
-- 🧠 **Multi-agent status feed** – Real-time progress tracking for vision, nutrition analyst, and culinary expert agents
-- 📜 **Local history log** – Revisit previous analyses/recipes, rename entries, and delete old ones
-- 💅 **Enhanced UI/UX** – Improved responsive layout, clearer recipe cards, and a more polished user experience.
+**Image-based meal analysis** — Upload a food photo and a vision agent identifies ingredients automatically.
 
----
+**Nutritional breakdown** — Get estimated calories, macro and micronutrient distribution, a health score, and improvement suggestions.
 
-## 🏗️ Architecture
+**Recipe generation** — The culinary agent creates recipes tailored to your dietary preference: Vegan, Vegetarian, Gluten-Free, Keto, or Paleo.
 
-### Front End
+**Multi-agent status feed** — A real-time timeline shows progress across the vision, nutrition, and culinary agents as they work.
 
-Single-page application built with:
-
-- **React 19.2** + **TypeScript 5.8**
-- **Vite 7.3** for blazing-fast development
-- **TailwindCSS** for modern, responsive styling
-- **Lucide React** for beautiful icons
-- **Recharts** for data visualization
-
-### Multi-Agent System
-
-Implemented using **Google Generative AI SDK** with three specialized agents:
-
-1. **Vision Agent** (`visionAgent`)  
-   Analyzes meal images to identify food components and ingredients
-
-2. **Nutrition Analyst** (`nutritionAnalyst`)  
-   Calculates detailed nutritional breakdown with macros, micros, and health scoring
-
-3. **Culinary Expert** (`culinaryExpert`)  
-   Generates creative recipes based on dietary preferences and available ingredients
-
-### Orchestration
-
-The main orchestration in `App.tsx`:
-
-- User uploads an image
-- Vision agent detects ingredients
-- Based on workflow selection:
-  - **Analysis mode** → Nutrition analyst provides detailed breakdown
-  - **Recipe mode** → Culinary expert creates personalized recipe
-- Results are logged to localStorage and rendered in beautiful UI components
+**Local history log** — Browse, rename, and delete previous analyses and recipes stored in your browser.
 
 ---
 
-## 📋 Prerequisites
+## Architecture
 
-- [Node.js](https://nodejs.org/) (LTS version 18.x or newer)
-- `npm` (bundled with Node.js)
-- **Google Gemini API key** from [Google AI Studio](https://aistudio.google.com/app/apikey)
+NourishBot is a single-page React application fronted by a lightweight Express middleware layer that proxies Gemini API calls, keeping the API key server-side.
+
+### Frontend stack
+
+| Layer | Technology |
+|---|---|
+| UI framework | React 19.2 + TypeScript 5.8 |
+| Build tool | Vite 7.3 |
+| Styling | Tailwind CSS |
+| Icons | Lucide React |
+| Charts | Recharts |
+
+### Multi-agent system
+
+Three specialized agents are orchestrated sequentially in `App.tsx`:
+
+1. **Vision Agent** — Analyzes the uploaded image to identify food components and ingredients.
+2. **Nutrition Analyst** — Computes a detailed macro/micro breakdown and health score from the identified ingredients.
+3. **Culinary Expert** — Generates a personalized recipe based on the detected ingredients and the selected dietary preference.
+
+In **Analysis mode**, only the Vision and Nutrition agents run. In **Recipe mode**, the Culinary Expert replaces the Nutrition Analyst as the second step.
+
+All agents are powered by the **Google Generative AI SDK** (`@google/generative-ai`).
 
 ---
 
-## 🚀 Getting Started
+## Prerequisites
 
-### 1. Clone the Repository
+- [Node.js](https://nodejs.org/) 18.x LTS or newer (includes `npm`)
+- A **Google Gemini API key** — get one free at [Google AI Studio](https://aistudio.google.com/app/apikey)
+
+---
+
+## Getting Started
+
+### 1. Clone the repository
 
 ```bash
 git clone <repository-url>
 cd nourishbot-ai-coach
 ```
 
-### 2. Install Dependencies
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Configure Environment Variables
-
-Create a `.env` file in the project root:
+### 3. Configure environment variables
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` and add your Gemini API key:
+Open `.env` and set your Gemini API key:
 
 ```env
 GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
-### 4. Start Development Server
+> **Security note:** The API key is used exclusively by the server-side proxy (`server/middleware.ts`) and is never sent to the browser. Do not prefix it with `VITE_` or reference it in any client-side code.
+
+### 4. Start the development server
 
 ```bash
 npm run dev
 ```
 
-Vite will start the dev server at `http://localhost:5173`
+The app will be available at `http://localhost:5173`.
 
-### 5. Build for Production
+### 5. Build for production
 
 ```bash
 npm run build
 ```
 
-The production build will be created in the `dist/` directory.
+Output goes to `dist/`. Serve it behind a Node/Express server that runs the middleware so the API key stays protected.
 
 ---
 
-## 📚 Documentation
+## Available Scripts
 
-- [Detailed Walkthrough](./Walkthrough.MD) - In-depth technical guide
-- [Changelog](./CHANGELOG.md) - Version history and updates
-- [API Documentation](#api-documentation) - Gemini service details
-
----
-
-## 🛠️ Available Scripts
-
-| Script                 | Description                              |
-| ---------------------- | ---------------------------------------- |
-| `npm run dev`          | Start development server with hot reload |
-| `npm run build`        | Create optimized production build        |
-| `npm run preview`      | Preview production build locally         |
-| `npm run lint`         | Run ESLint to check code quality         |
-| `npm run format`       | Format code with Prettier                |
-| `npm run format:check` | Check code formatting without writing    |
+| Script | Description |
+|---|---|
+| `npm run dev` | Start dev server with hot module replacement |
+| `npm run build` | Create an optimized production build |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint` | Run ESLint across the codebase |
+| `npm run format` | Format all files with Prettier |
+| `npm run format:check` | Check formatting without writing changes |
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 nourishbot-ai-coach/
 ├── server/
-│   └── middleware.ts          # Backend proxy for secure API calls
+│   └── middleware.ts          # Express proxy — handles Gemini API calls server-side
 ├── components/
-│   ├── AgentStatus.tsx      # Multi-agent timeline UI
-│   ├── HistoryLog.tsx       # Past analyses list
-│   ├── NutritionAnalysis.tsx # Nutrition breakdown view
-│   └── RecipeCard.tsx       # Recipe display component
+│   ├── AgentStatus.tsx        # Real-time multi-agent timeline
+│   ├── HistoryLog.tsx         # Browsable history of past sessions
+│   ├── NutritionAnalysis.tsx  # Macro/micro breakdown and health score
+│   └── RecipeCard.tsx         # Recipe display and formatting
 ├── services/
-│   └── geminiService.ts     # Gemini AI integration
-├── App.tsx                  # Main application component
-├── index.tsx                # React entry point
-├── types.ts                 # TypeScript type definitions
-├── .env.example             # Environment variables template
-├── index.html               # HTML entry point
-├── package.json             # Dependencies and scripts
-├── tsconfig.json            # TypeScript configuration
-├── vite.config.ts           # Vite configuration
-├── README.md                # This file
-├── CHANGELOG.md             # Version history
-└── Walkthrough.MD           # Technical guide
+│   └── geminiService.ts       # Agent definitions and Gemini SDK calls
+├── App.tsx                    # Root component and agent orchestration
+├── index.tsx                  # React entry point
+├── types.ts                   # Shared TypeScript types
+├── .env.example               # Environment variable template
+├── index.html                 # HTML shell
+├── package.json               # Dependencies and scripts
+├── tsconfig.json              # TypeScript configuration
+├── vite.config.ts             # Vite configuration
+├── README.md                  # This file
+├── CHANGELOG.md               # Version history
+└── Walkthrough.MD             # In-depth technical guide
 ```
 
 ---
 
-## 🔐 Data & Privacy
+## Data & Privacy
 
-- **Local Storage**: Analysis and recipe history stored in browser's `localStorage`
-- **Image Processing**: Images are securely processed on the server-side proxy.
-- **No Server Storage**: No data is stored on any backend server.
-- **API Key Security**: The Gemini API key is securely stored and used on the server, never exposed to the client.
-
----
-
-## 🎯 Future Enhancements
-
-- [ ] Add more dietary preferences (Low-FODMAP, Diabetic-friendly)
-- [ ] Implement meal substitution suggestions
-- [ ] Add user accounts with cloud storage
-- [ ] Weekly macro trend analytics
-- [ ] Mobile app versions (iOS/Android)
-- [ ] Secure backend API proxy
-- [ ] Barcode scanning for packaged foods
-- [ ] Integration with fitness trackers
+- **History** is stored in `localStorage` — it never leaves the browser.
+- **Images** are sent to the server-side proxy for processing; they are not stored.
+- **No backend persistence** — there is no database or server-side storage.
+- **API key** lives only in the server environment and is never exposed to the client.
 
 ---
 
-## 🤝 Contributing
+## Known Limitations
 
-Contributions are welcome! Here's how you can help:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-For major changes, please open an issue first to discuss what you would like to change.
+- History is capped at 10 entries.
+- Rate limiting is subject to the Gemini API free tier.
+- No user accounts or cross-device sync (localStorage only).
 
 ---
 
-## 📄 License
+## Contributing
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+1. Fork the repository.
+2. Create a feature branch: `git checkout -b feature/your-feature`.
+3. Commit your changes: `git commit -m 'Add your feature'`.
+4. Push the branch: `git push origin feature/your-feature`.
+5. Open a Pull Request.
 
-Copyright (c) 2024 Darshil Shah
-
----
-
-## 🐛 Support
-
-For issues or questions:
-
-- [Open an issue](../../issues) on GitHub
-- Check existing issues for solutions
-- Review the [Walkthrough](./Walkthrough.MD) for technical details
+For significant changes, open an issue first to align on the approach before writing code.
 
 ---
 
-## 🙏 Acknowledgments
+## License
 
-- **Google Gemini AI** for powerful vision and language models
-- **React Team** for the amazing UI library
-- **Tailwind CSS** for beautiful, utility-first styling
-- **Recharts** for elegant data visualization
+MIT License — see [LICENSE](LICENSE) for details.  
+Copyright © 2024 Darshil Shah
+
+---
+
+## Acknowledgments
+
+- [Google Gemini](https://deepmind.google/technologies/gemini/) for the vision and language models
+- [React](https://react.dev/), [Tailwind CSS](https://tailwindcss.com/), and [Recharts](https://recharts.org/) for the frontend stack
 
 ---
 
 <div align="center">
 
-Made with ❤️ by [Darshil Shah](https://github.com/darshilshah)
-
-**[⬆ back to top](#nourishbot-ai-coach)**
+**[↑ Back to top](#nourishbot-ai-coach)**
 
 </div>
