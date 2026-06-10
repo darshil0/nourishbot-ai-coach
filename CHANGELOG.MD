@@ -159,6 +159,20 @@ If upgrading from an earlier version:
 
 ---
 
+## [1.1.1] - 2024-05-22
+
+### Added
+- Integrated a secure backend proxy for Gemini API calls, moving sensitive logic away from the client.
+- Added explicit TypeScript typing for Gemini AI schemas to ensure better build-time safety.
+
+### Fixed
+- Resolved TypeScript compilation errors in the middleware related to `ResponseSchema` types.
+- Fixed an issue where the application would fail to build if `GEMINI_API_KEY` was not present in the build environment.
+
+### Changed
+- Synchronized versioning across `package.json`, `README.md`, and `CHANGELOG.MD`.
+- Updated `README.md` to reflect the actual project structure and removed outdated directory references.
+
 ## [Unreleased]
 
 ### Planned Features
