@@ -5,7 +5,6 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-    "types": ["node", "vite/client"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -27,6 +26,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["src/**/*", "*.ts", "*.tsx"],
+  "include": ["*.ts", "*.tsx", "App.tsx", "index.tsx", "types.ts"],
   "exclude": ["node_modules", "dist"]
 }
