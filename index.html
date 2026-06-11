@@ -16,22 +16,53 @@
         font-family: 'Inter', sans-serif;
         background-color: #f8fafc;
       }
+      /* Add tailwindcss-animate plugin support for animate-in classes */
+      @layer utilities {
+        .animate-in {
+          animation-name: fade-in;
+          animation-duration: var(--animate-duration, 0.5s);
+          animation-timing-function: var(--animate-easing, ease);
+          animation-fill-mode: both;
+        }
+        .fade-in {
+          animation-name: fade-in;
+        }
+        .slide-in-from-top-2 {
+          animation-name: slide-in-from-top-2;
+        }
+        .slide-in-from-bottom-4 {
+          animation-name: slide-in-from-bottom-4;
+        }
+        @keyframes fade-in {
+          0% { opacity: 0; }
+          100% { opacity: 1; }
+        }
+        @keyframes slide-in-from-top-2 {
+          0% { opacity: 0; transform: translateY(-8px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slide-in-from-bottom-4 {
+          0% { opacity: 0; transform: translateY(16px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+      }
     </style>
     <script type="importmap">
       {
         "imports": {
-          "recharts": "https://esm.sh/recharts@^3.6.0",
-          "react/": "https://esm.sh/react@^19.2.3/",
-          "react": "https://esm.sh/react@^19.2.3",
-          "@google/genai": "https://esm.sh/@google/genai@^1.35.0",
-          "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-          "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+          "react": "https://esm.sh/react@19.2.3",
+          "react/": "https://esm.sh/react@19.2.3/",
+          "react-dom/client": "https://esm.sh/react-dom@19.2.3/client",
+          "react-dom/": "https://esm.sh/react-dom@19.2.3/",
+          "lucide-react": "https://esm.sh/lucide-react@0.562.0",
+          "recharts": "https://esm.sh/recharts@3.6.0",
+          "@google/genai": "https://esm.sh/@google/genai@1.35.0"
         }
       }
     </script>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>
