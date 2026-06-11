@@ -7,11 +7,13 @@ interface Props {
 }
 
 export const RecipeCard: React.FC<Props> = ({ recipe }) => {
+  const totalTime = recipe.prepTime + recipe.cookTime;
+
   return (
     <div className="bg-gradient-to-br from-white via-slate-50 to-emerald-50 rounded-3xl shadow-sm border border-slate-100/80 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="p-6 sm:p-8">
         <div className="flex flex-wrap gap-2 mb-4">
-          {recipe.dietaryTags?.map((tag, i) => (
+          {recipe.tags.map((tag, i) => (
             <span
               key={i}
               className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-[10px] font-bold uppercase tracking-wider border border-blue-200/50"
@@ -29,7 +31,15 @@ export const RecipeCard: React.FC<Props> = ({ recipe }) => {
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-8 border-y border-slate-200/80 py-4">
           <div className="flex items-center gap-2 text-slate-700">
             <Clock className="w-4 h-4 text-slate-400" />
-            <span className="text-sm font-semibold">{recipe.prepTime}</span>
+            <span className="text-sm font-semibold">
+              {recipe.prepTime} min prep
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-slate-700">
+            <Clock className="w-4 h-4 text-slate-400" />
+            <span className="text-sm font-semibold">
+              {recipe.cookTime} min cook
+            </span>
           </div>
           <div className="flex items-center gap-2 text-slate-700">
             <Users className="w-4 h-4 text-slate-400" />
@@ -37,6 +47,14 @@ export const RecipeCard: React.FC<Props> = ({ recipe }) => {
               {recipe.servings} Servings
             </span>
           </div>
+          {typeof recipe.calories === 'number' && (
+            <div className="flex items-center gap-2 text-slate-700">
+              <ChefHat className="w-4 h-4 text-slate-400" />
+              <span className="text-sm font-semibold">
+                {recipe.calories} kcal
+              </span>
+            </div>
+          )}
           <div className="flex items-center gap-2 text-slate-700">
             <ChefHat className="w-4 h-4 text-slate-400" />
             <span className="text-sm font-semibold">Chef Recommended</span>
@@ -65,7 +83,10 @@ export const RecipeCard: React.FC<Props> = ({ recipe }) => {
                       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  <span>{ing}</span>
+                  <span>
+                    {ing.amount} {ing.unit} {ing.name}
+                    {ing.notes ? ` (${ing.notes})` : ''}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -88,6 +109,30 @@ export const RecipeCard: React.FC<Props> = ({ recipe }) => {
             </div>
           </div>
         </div>
+
+        {recipe.dietaryCompliance.length > 0 && (
+          <div className="mt-8 pt-6 border-t border-slate-200/80">
+            <h4 className="text-sm font-bold text-slate-400 uppercase mb-3 tracking-wider">
+              Dietary Compliance
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {recipe.dietaryCompliance.map((diet, i) => (
+                <span
+                  key={i}
+                  className="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs border border-emerald-100 font-medium"
+                >
+                  {diet}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {totalTime > 0 && (
+          <div className="mt-6 text-xs text-slate-400">
+            Total time: {totalTime} minutes
+          </div>
+        )}
       </div>
     </div>
   );
