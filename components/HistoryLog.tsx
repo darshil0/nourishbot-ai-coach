@@ -69,9 +69,10 @@ export const HistoryLog: React.FC<Props> = ({
       return (
         <div className="mt-1 text-[11px] text-slate-600 leading-tight">
           <span className="font-bold text-slate-800">Calories:</span>{' '}
-          {data.totalCalories},{' '}
-          <span className="font-bold text-slate-800 ml-1">Macros:</span> P:
-          {data.macros.protein}g, C:{data.macros.carbs}g, F:{data.macros.fat}g
+          {data.calories},{' '}
+          <span className="font-bold text-slate-800 ml-1">Macros:</span> P:{' '}
+          {data.protein}g, C:{data.carbohydrates}g, F:{data.fat}g
+          {data.fiber && <span className="ml-1">| Fiber: {data.fiber}g</span>}
         </div>
       );
     } else {
@@ -79,6 +80,9 @@ export const HistoryLog: React.FC<Props> = ({
       return (
         <div className="mt-1 text-[11px] text-slate-600 leading-tight">
           <span className="font-bold text-slate-800">Recipe:</span> {data.title}
+          <span className="ml-1">
+            | {data.servings} servings | {data.prepTime + data.cookTime}min
+          </span>
         </div>
       );
     }
@@ -130,7 +134,7 @@ export const HistoryLog: React.FC<Props> = ({
 
                 <div className="flex-1 min-w-0">
                   {editingId === item.id ? (
-                    <div className="flex items-center gap-1 animate-in fade-in zoom-in-95 duration-200">
+                    <div className="flex items-center gap-1 animate-in fade-in duration-200">
                       <input
                         autoFocus
                         className="w-full text-sm font-bold text-slate-800 bg-white border-2 border-green-400 rounded-md px-2 py-0.5 outline-none focus:ring-2 focus:ring-green-100"
