@@ -30,6 +30,23 @@ import { HistoryLog } from './components/HistoryLog';
 const STORAGE_KEY = 'nourishbot_history';
 const MAX_HISTORY = 10;
 
+const safeParseHistory = (value: string | null): HistoryItem[] => {
+  if (!value) return [];
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
+
+const createId = () => {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+    return crypto.randomUUID();
+  }
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+};
+
 const App: React.FC = () => {
   const [image, setImage] = useState<string | null>(null);
   const [workflow, setWorkflow] = useState<Workflow>(Workflow.ANALYSIS);
@@ -45,21 +62,18 @@ const App: React.FC = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Load history from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
-        setHistory(JSON.parse(saved));
-      } catch (error) {
-        console.error('Failed to parse history:', error);
-      }
-    }
+    if (typeof window === 'undefined') return;
+    setHistory(safeParseHistory(window.localStorage.getItem(STORAGE_KEY)));
   }, []);
 
-  // Save history to localStorage
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    if (typeof window === 'undefined') return;
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    } catch (error) {
+      console.error('Failed to save history:', error);
+    }
   }, [history]);
 
   const addLog = (
@@ -78,23 +92,41 @@ const App: React.FC = () => {
     ]);
   };
 
+  const clearCurrentResults = () => {
+    setNutritionResult(null);
+    setRecipeResult(null);
+    setLogs([]);
+    setActiveHistoryId(null);
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result as string);
-        setNutritionResult(null);
-        setRecipeResult(null);
-        setLogs([]);
-        setActiveHistoryId(null);
-      };
-      reader.readAsDataURL(file);
+    e.target.value = '';
+
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      addLog('System', 'Please upload a valid image file.', 'error');
+      return;
     }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const result = reader.result;
+      if (typeof result === 'string') {
+        setImage(result);
+        clearCurrentResults();
+      } else {
+        addLog('System', 'Unable to read the selected image.', 'error');
+      }
+    };
+    reader.onerror = () => {
+      addLog('System', 'Failed to load the image file.', 'error');
+    };
+    reader.readAsDataURL(file);
   };
 
   const runMultiAgentPipeline = async () => {
-    if (!image) return;
+    if (!image || loading) return;
 
     setLoading(true);
     setLogs([]);
@@ -103,9 +135,8 @@ const App: React.FC = () => {
     setActiveHistoryId(null);
 
     try {
-      const base64Data = image.split(',')[1];
+      const base64Data = image.includes(',') ? image.split(',')[1] : image;
 
-      // Phase 1: Vision
       addLog(
         'Vision Agent',
         'Initializing neural visual processing...',
@@ -122,7 +153,6 @@ const App: React.FC = () => {
       let label = ingredients[0] || 'Meal Analysis';
 
       if (workflow === Workflow.ANALYSIS) {
-        // Phase 2: Analysis
         addLog(
           'Nutrition Analyst',
           'Calculating caloric density and macro profile...',
@@ -137,7 +167,6 @@ const App: React.FC = () => {
           'completed'
         );
       } else {
-        // Phase 2 & 3: Recipe
         addLog(
           'Nutrition Analyst',
           'Briefly scanning macro components...',
@@ -162,9 +191,8 @@ const App: React.FC = () => {
         addLog('Culinary Expert', 'Recipe curation complete.', 'completed');
       }
 
-      // Add to history
       const newHistoryItem: HistoryItem = {
-        id: Math.random().toString(36).slice(2, 11),
+        id: createId(),
         timestamp: Date.now(),
         image,
         workflow,
@@ -190,8 +218,9 @@ const App: React.FC = () => {
   const handleSelectHistory = (item: HistoryItem) => {
     setImage(item.image);
     setWorkflow(item.workflow);
-    setDiet(item.diet || DietaryPreference.NONE);
+    setDiet(item.diet ?? DietaryPreference.NONE);
     setActiveHistoryId(item.id);
+
     setLogs([
       {
         agentName: "Coach's Log",
@@ -216,19 +245,21 @@ const App: React.FC = () => {
     );
   };
 
-  const deleteHistoryItem = (id: string) => {
-    setHistory((prev) => prev.filter((item) => item.id !== id));
-    if (activeHistoryId === id) {
-      reset();
-    }
-  };
-
   const reset = () => {
     setImage(null);
     setNutritionResult(null);
     setRecipeResult(null);
     setLogs([]);
     setActiveHistoryId(null);
+    setLoading(false);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const deleteHistoryItem = (id: string) => {
+    setHistory((prev) => prev.filter((item) => item.id !== id));
+    if (activeHistoryId === id) {
+      reset();
+    }
   };
 
   return (
@@ -305,6 +336,7 @@ const App: React.FC = () => {
                   </button>
                 </div>
               )}
+
               <input
                 type="file"
                 hidden
@@ -434,8 +466,8 @@ const App: React.FC = () => {
                   Multi-Agent Thinking
                 </h3>
                 <p className="text-slate-500 max-w-sm">
-                  Our specialist agents are discussing your meal's macro profile
-                  and creative culinary possibilities.
+                  Our specialist agents are discussing your meal&apos;s macro
+                  profile and creative culinary possibilities.
                 </p>
               </div>
             )}
