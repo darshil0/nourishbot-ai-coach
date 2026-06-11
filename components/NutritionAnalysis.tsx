@@ -1,13 +1,6 @@
 import React from 'react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { NutritionData } from '../types';
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-  Legend,
-} from 'recharts';
 
 interface Props {
   data: NutritionData;
@@ -17,10 +10,16 @@ const COLORS = ['#22c55e', '#3b82f6', '#f59e0b'];
 
 export const NutritionAnalysis: React.FC<Props> = ({ data }) => {
   const chartData = [
-    { name: 'Protein', value: data.macros.protein },
-    { name: 'Carbs', value: data.macros.carbs },
-    { name: 'Fat', value: data.macros.fat },
+    { name: 'Protein', value: data.protein },
+    { name: 'Carbs', value: data.carbohydrates },
+    { name: 'Fat', value: data.fat },
   ];
+
+  // Calculate macro percentages for display
+  const totalMacros = data.protein + data.carbohydrates + data.fat;
+  const proteinPct = Math.round((data.protein / totalMacros) * 100);
+  const carbsPct = Math.round((data.carbohydrates / totalMacros) * 100);
+  const fatPct = Math.round((data.fat / totalMacros) * 100);
 
   return (
     <div className="space-y-6">
@@ -56,19 +55,18 @@ export const NutritionAnalysis: React.FC<Props> = ({ data }) => {
           <div className="grid grid-cols-3 gap-2 text-center mt-2">
             <div>
               <div className="text-xs text-slate-500">Protein</div>
-              <div className="font-bold text-green-600">
-                {data.macros.protein}g
-              </div>
+              <div className="font-bold text-green-600">{data.protein}g</div>
+              <div className="text-xs text-green-500">{proteinPct}%</div>
             </div>
             <div>
               <div className="text-xs text-slate-500">Carbs</div>
-              <div className="font-bold text-blue-600">
-                {data.macros.carbs}g
-              </div>
+              <div className="font-bold text-blue-600">{data.carbohydrates}g</div>
+              <div className="text-xs text-blue-500">{carbsPct}%</div>
             </div>
             <div>
               <div className="text-xs text-slate-500">Fat</div>
-              <div className="font-bold text-amber-600">{data.macros.fat}g</div>
+              <div className="font-bold text-amber-600">{data.fat}g</div>
+              <div className="text-xs text-amber-500">{fatPct}%</div>
             </div>
           </div>
         </div>
@@ -80,7 +78,7 @@ export const NutritionAnalysis: React.FC<Props> = ({ data }) => {
               Total Calories
             </div>
             <div className="text-6xl font-black text-white drop-shadow-sm">
-              {data.totalCalories}
+              {data.calories}
             </div>
             <div className="text-sm text-emerald-50/90 mt-2">
               kcal estimated
@@ -102,46 +100,58 @@ export const NutritionAnalysis: React.FC<Props> = ({ data }) => {
                 ></div>
               </div>
             </div>
+
+            {/* Additional nutrition details */}
+            <div className="mt-6 grid grid-cols-3 gap-3">
+              {data.fiber && (
+                <div className="text-center">
+                  <div className="text-xs text-emerald-50/80">Fiber</div>
+                  <div className="font-bold text-white">{data.fiber}g</div>
+                </div>
+              )}
+              {data.sugar && (
+                <div className="text-center">
+                  <div className="text-xs text-emerald-50/80">Sugar</div>
+                  <div className="font-bold text-white">{data.sugar}g</div>
+                </div>
+              )}
+              {data.sodium && (
+                <div className="text-center">
+                  <div className="text-xs text-emerald-50/80">Sodium</div>
+                  <div className="font-bold text-white">{data.sodium}mg</div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
       <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
         <h3 className="text-lg font-bold text-slate-800 mb-4">Meal Insights</h3>
-        <p className="text-slate-600 mb-6 italic">"{data.healthSummary}"</p>
+        
+        {/* Health notes */}
+        {data.notes && (
+          <p className="text-slate-600 mb-6 italic">"{data.notes}"</p>
+        )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Tags */}
+        {data.tags.length > 0 && (
           <div>
             <h4 className="text-sm font-bold text-slate-400 uppercase mb-3">
-              Micronutrients
+              Nutrition Tags
             </h4>
             <div className="flex flex-wrap gap-2">
-              {data.micros.map((m, i) => (
+              {data.tags.map((tag, i) => (
                 <span
                   key={i}
-                  className="px-3 py-1 bg-slate-50 text-slate-600 rounded-full text-xs border border-slate-100"
+                  className="px-3 py-1 bg-green-50 text-green-700 rounded-full text-xs border border-green-100 font-medium"
                 >
-                  {m}
+                  {tag}
                 </span>
               ))}
             </div>
           </div>
-          <div>
-            <h4 className="text-sm font-bold text-slate-400 uppercase mb-3">
-              Chef's Suggestions
-            </h4>
-            <ul className="space-y-2">
-              {data.suggestions.map((s, i) => (
-                <li
-                  key={i}
-                  className="text-sm text-slate-600 flex items-start gap-2"
-                >
-                  <span className="text-green-500 mt-1">•</span> {s}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
