@@ -1,10 +1,10 @@
 import React from 'react';
 import { AgentLog } from '../types';
-import { Activity, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
+import { Activity, CheckCircle, Loader, AlertCircle } from 'lucide-react';
 
 const icons = {
   pending: <Activity className="w-5 h-5 text-gray-400" />,
-  processing: <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />,
+  processing: <Loader className="w-5 h-5 text-blue-500 animate-spin" />,
   completed: <CheckCircle className="w-5 h-5 text-green-500" />,
   error: <AlertCircle className="w-5 h-5 text-red-500" />,
 };
