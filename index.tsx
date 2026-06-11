@@ -8,13 +8,11 @@ if (!rootElement) {
 }
 
 const root = ReactDOM.createRoot(rootElement, {
-  onUncaughtError: (error, errorInfo) => {
-    console.error('Uncaught Error:', error, errorInfo);
-  },
-  onCaughtError: (error, errorInfo) => {
-    console.error('Caught Error:', error, errorInfo);
+  onRecoverableError: (error, errorInfo) => {
+    console.error('Recoverable Error:', error, errorInfo);
   },
 });
+
 root.render(
   <React.StrictMode>
     <App />
