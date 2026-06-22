@@ -22,6 +22,16 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [1.1.3] — 2026-06-12
+
+### Added
+- New `CONTRIBUTING.md` file to guide community contributions.
+
+### Changed
+- Updated dependencies in `package.json` to their latest stable versions (React 19.2.7, Recharts 3.8.1).
+- Updated `README.md` to include all currently supported dietary preferences (Dairy-Free, Low-Carb).
+- Synchronized versioning across `package.json`, `README.md`, and `CHANGELOG.md` to 1.1.3.
+
 ## [1.1.2] — 2026-06-11
 
 ### Fixed

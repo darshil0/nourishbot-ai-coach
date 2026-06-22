@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.1.2-green.svg)
+![Version](https://img.shields.io/badge/version-1.1.3-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![React](https://img.shields.io/badge/React-19-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)
@@ -21,7 +21,7 @@ A multi-agent AI nutrition coach that turns food photos into rich nutritional in
 
 **Nutritional breakdown**: Get estimated calories, macro and micronutrient distribution, a health score, and improvement suggestions.
 
-**Recipe generation**: The culinary agent creates recipes tailored to your dietary preference: Vegan, Vegetarian, Gluten-Free, Keto, or Paleo.
+**Recipe generation**: The culinary agent creates recipes tailored to your dietary preference: Vegan, Vegetarian, Dairy-Free, Gluten-Free, Keto, Paleo, or Low-Carb.
 
 **Multi-agent status feed**:A real-time timeline shows progress across the vision, nutrition, and culinary agents as they work.
 
