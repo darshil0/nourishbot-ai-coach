@@ -9,23 +9,18 @@ const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
 const NUTRITION_SCHEMA: Schema = {
     type: SchemaType.OBJECT,
     properties: {
-        foodItems: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
-        totalCalories: { type: SchemaType.NUMBER },
-        macros: {
-            type: SchemaType.OBJECT,
-            properties: {
-                protein: { type: SchemaType.NUMBER },
-                carbs: { type: SchemaType.NUMBER },
-                fat: { type: SchemaType.NUMBER },
-            },
-            required: ['protein', 'carbs', 'fat'],
-        },
-        micros: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
+        calories: { type: SchemaType.NUMBER },
+        protein: { type: SchemaType.NUMBER },
+        carbohydrates: { type: SchemaType.NUMBER },
+        fat: { type: SchemaType.NUMBER },
+        fiber: { type: SchemaType.NUMBER },
+        sugar: { type: SchemaType.NUMBER },
+        sodium: { type: SchemaType.NUMBER },
         healthScore: { type: SchemaType.NUMBER },
-        healthSummary: { type: SchemaType.STRING },
-        suggestions: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
+        tags: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
+        notes: { type: SchemaType.STRING },
     },
-    required: ['foodItems', 'totalCalories', 'macros', 'healthScore', 'healthSummary'],
+    required: ['calories', 'protein', 'carbohydrates', 'fat', 'healthScore', 'tags'],
 };
 
 const RECIPE_SCHEMA: Schema = {
@@ -33,13 +28,28 @@ const RECIPE_SCHEMA: Schema = {
     properties: {
         title: { type: SchemaType.STRING },
         description: { type: SchemaType.STRING },
-        prepTime: { type: SchemaType.STRING },
-        servings: { type: SchemaType.NUMBER },
-        ingredients: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
+        ingredients: {
+            type: SchemaType.ARRAY,
+            items: {
+                type: SchemaType.OBJECT,
+                properties: {
+                    name: { type: SchemaType.STRING },
+                    amount: { type: SchemaType.NUMBER },
+                    unit: { type: SchemaType.STRING },
+                    notes: { type: SchemaType.STRING },
+                },
+                required: ['name', 'amount', 'unit'],
+            },
+        },
         instructions: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
-        dietaryTags: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
+        prepTime: { type: SchemaType.NUMBER },
+        cookTime: { type: SchemaType.NUMBER },
+        servings: { type: SchemaType.NUMBER },
+        calories: { type: SchemaType.NUMBER },
+        tags: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
+        dietaryCompliance: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
     },
-    required: ['title', 'description', 'ingredients', 'instructions'],
+    required: ['title', 'description', 'ingredients', 'instructions', 'prepTime', 'cookTime', 'servings', 'tags', 'dietaryCompliance'],
 };
 
 import { IncomingMessage, ServerResponse } from 'http';
