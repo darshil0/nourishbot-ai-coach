@@ -1,6 +1,6 @@
 import { DietaryPreference, NutritionData, RecipeData } from '../types';
 
-async function callProxy(agent: string, payload: any): Promise<string> {
+async function callProxy(agent: string, payload: unknown): Promise<string> {
   const response = await fetch('/api/generate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
