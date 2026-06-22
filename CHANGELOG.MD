@@ -22,6 +22,16 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [1.1.2] — 2026-06-11
+
+### Fixed
+- TypeScript build errors in `services/geminiService.ts` by importing missing interfaces.
+- ESLint compatibility issues with ESLint 9 by updating the linting script in `package.json`.
+- Inconsistent data structures between frontend and backend by aligning `server/middleware.ts` schemas with `types.ts`.
+
+### Changed
+- Refactored `services/geminiService.ts` to use the server-side proxy instead of direct API calls or mocks.
+
 ## [1.1.1] — 2026-06-10
 
 ### Added
