@@ -16,6 +16,8 @@ import {
   RecipeData,
   AgentLog,
   HistoryItem,
+  validateNutritionData,
+  validateRecipeData,
 } from './types';
 import {
   visionAgent,
@@ -57,15 +59,13 @@ const App: React.FC = () => {
     null
   );
   const [recipeResult, setRecipeResult] = useState<RecipeData | null>(null);
-  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [history, setHistory] = useState<HistoryItem[]>(() => {
+    if (typeof window === 'undefined') return [];
+    return safeParseHistory(window.localStorage.getItem(STORAGE_KEY));
+  });
   const [activeHistoryId, setActiveHistoryId] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    setHistory(safeParseHistory(window.localStorage.getItem(STORAGE_KEY)));
-  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -82,13 +82,13 @@ const App: React.FC = () => {
     status: AgentLog['status']
   ) => {
     setLogs((prev) => [
+      ...prev,
       {
         agentName: agent,
         message,
         status,
         timestamp: new Date(),
       },
-      ...prev,
     ]);
   };
 
@@ -168,18 +168,6 @@ const App: React.FC = () => {
         );
       } else {
         addLog(
-          'Nutrition Analyst',
-          'Briefly scanning macro components...',
-          'processing'
-        );
-        await nutritionAnalyst(ingredients);
-        addLog(
-          'Nutrition Analyst',
-          'Nutritional context passed to Culinary Agent.',
-          'completed'
-        );
-
-        addLog(
           'Culinary Expert',
           `Crafting ${diet} compliant recipe...`,
           'processing'
@@ -218,7 +206,7 @@ const App: React.FC = () => {
   const handleSelectHistory = (item: HistoryItem) => {
     setImage(item.image);
     setWorkflow(item.workflow);
-    setDiet(item.diet ?? DietaryPreference.NONE);
+    setDiet(item.diet);
     setActiveHistoryId(item.id);
 
     setLogs([
@@ -231,11 +219,21 @@ const App: React.FC = () => {
     ]);
 
     if (item.workflow === Workflow.ANALYSIS) {
-      setNutritionResult(item.result as NutritionData);
-      setRecipeResult(null);
+      const validated = validateNutritionData(item.result);
+      if (validated) {
+        setNutritionResult(validated);
+        setRecipeResult(null);
+      } else {
+        addLog('System', 'History item contains invalid nutrition data.', 'error');
+      }
     } else {
-      setRecipeResult(item.result as RecipeData);
-      setNutritionResult(null);
+      const validated = validateRecipeData(item.result);
+      if (validated) {
+        setRecipeResult(validated);
+        setNutritionResult(null);
+      } else {
+        addLog('System', 'History item contains invalid recipe data.', 'error');
+      }
     }
   };
 
@@ -246,12 +244,12 @@ const App: React.FC = () => {
   };
 
   const reset = () => {
+    if (loading) return;
     setImage(null);
     setNutritionResult(null);
     setRecipeResult(null);
     setLogs([]);
     setActiveHistoryId(null);
-    setLoading(false);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
@@ -280,17 +278,27 @@ const App: React.FC = () => {
             </div>
           </div>
           <div className="hidden md:flex items-center gap-4 text-xs font-semibold text-slate-500">
-            <span className="px-3 py-1 rounded-full bg-green-50 text-green-700 border border-green-100">
+            <span className="px-3 py-1 rounded-full bg-green-50 text-green-700 border border-green-100 cursor-default">
               Coach
             </span>
-            <span className="px-3 py-1 rounded-full border border-dashed border-slate-200">
+            <span
+              className="px-3 py-1 rounded-full border border-dashed border-slate-200 opacity-50 cursor-not-allowed"
+              title="Planner coming soon"
+            >
               Planner
             </span>
-            <span className="px-3 py-1 rounded-full border border-dashed border-slate-200">
+            <span
+              className="px-3 py-1 rounded-full border border-dashed border-slate-200 opacity-50 cursor-not-allowed"
+              title="Journal coming soon"
+            >
               Journal
             </span>
           </div>
-          <button className="hidden sm:inline-flex bg-slate-900 text-white px-4 py-2.5 rounded-lg text-xs font-bold hover:bg-slate-800 transition-all shadow-md shadow-slate-300/60">
+          <button
+            className="hidden sm:inline-flex bg-slate-900 text-white px-4 py-2.5 rounded-lg text-xs font-bold opacity-50 cursor-not-allowed shadow-md shadow-slate-300/60"
+            disabled
+            title="Dashboard coming soon"
+          >
             Dashboard
           </button>
         </div>
@@ -494,20 +502,12 @@ const App: React.FC = () => {
           </div>
           <span>&copy; 2026 NourishBot AI Coaching System</span>
           <div className="flex gap-6">
-            <a
-              href="#"
-              className="hover:text-slate-900 transition-colors"
-              aria-label="Privacy Policy"
-            >
+            <span className="cursor-default" aria-label="Privacy Policy">
               Privacy Policy
-            </a>
-            <a
-              href="#"
-              className="hover:text-slate-900 transition-colors"
-              aria-label="Safety Guidelines"
-            >
+            </span>
+            <span className="cursor-default" aria-label="Safety Guidelines">
               Safety Guidelines
-            </a>
+            </span>
           </div>
         </div>
       </footer>

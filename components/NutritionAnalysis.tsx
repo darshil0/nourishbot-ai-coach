@@ -17,9 +17,9 @@ export const NutritionAnalysis: React.FC<Props> = ({ data }) => {
 
   // Calculate macro percentages for display
   const totalMacros = data.protein + data.carbohydrates + data.fat;
-  const proteinPct = Math.round((data.protein / totalMacros) * 100);
-  const carbsPct = Math.round((data.carbohydrates / totalMacros) * 100);
-  const fatPct = Math.round((data.fat / totalMacros) * 100);
+  const proteinPct = totalMacros > 0 ? Math.round((data.protein / totalMacros) * 100) : 0;
+  const carbsPct = totalMacros > 0 ? Math.round((data.carbohydrates / totalMacros) * 100) : 0;
+  const fatPct = totalMacros > 0 ? Math.round((data.fat / totalMacros) * 100) : 0;
 
   return (
     <div className="space-y-6">

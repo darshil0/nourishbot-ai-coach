@@ -87,8 +87,8 @@ All types are defined in `types.ts`:
 
 ```typescript
 export enum Workflow {
-  ANALYSIS = 'ANALYSIS',  // Nutrition breakdown
-  RECIPE = 'RECIPE'       // Recipe generation
+  ANALYSIS = 'analysis',  // Nutrition breakdown
+  RECIPE = 'recipe'       // Recipe generation
 }
 ```
 
@@ -96,12 +96,14 @@ export enum Workflow {
 
 ```typescript
 export enum DietaryPreference {
-  NONE = 'None',
-  VEGAN = 'Vegan',
-  VEGETARIAN = 'Vegetarian',
-  GLUTEN_FREE = 'Gluten-Free',
-  KETO = 'Keto',
-  PALEO = 'Paleo'
+  NONE = 'none',
+  VEGAN = 'vegan',
+  VEGETARIAN = 'vegetarian',
+  DAIRY_FREE = 'dairy-free',
+  GLUTEN_FREE = 'gluten-free',
+  KETO = 'keto',
+  PALEO = 'paleo',
+  LOW_CARB = 'low-carb',
 }
 ```
 
@@ -118,27 +120,40 @@ interface MacroNutrients {
 
 #### NutritionData
 ```typescript
-interface NutritionData {
-  foodItems: string[];          // Identified ingredients
-  totalCalories: number;        // Total kcal
-  macros: MacroNutrients;       // Protein, carbs, fat
-  micros: string[];             // Vitamins, minerals
-  healthScore: number;          // 1-100 rating
-  healthSummary: string;        // AI-generated summary
-  suggestions: string[];        // Improvement suggestions
+export interface NutritionData {
+  calories: number;
+  protein: number;
+  carbohydrates: number;
+  fat: number;
+  fiber?: number;
+  sugar?: number;
+  sodium?: number;
+  healthScore: number;
+  tags: string[];
+  notes?: string;
 }
 ```
 
 #### RecipeData
 ```typescript
-interface RecipeData {
-  title: string;                // Recipe name
-  description: string;          // Brief description
-  prepTime: string;             // e.g., "30 minutes"
-  servings: number;             // Number of servings
-  ingredients: string[];        // Ingredient list
-  instructions: string[];       // Step-by-step instructions
-  dietaryTags: string[];        // Tags like "Vegan", "High-Protein"
+export interface RecipeData {
+  title: string;
+  description: string;
+  ingredients: RecipeIngredient[];
+  instructions: string[];
+  prepTime: number;
+  cookTime: number;
+  servings: number;
+  calories?: number;
+  tags: string[];
+  dietaryCompliance: DietaryPreference[];
+}
+
+export interface RecipeIngredient {
+  name: string;
+  amount: number;
+  unit: string;
+  notes?: string;
 }
 ```
 

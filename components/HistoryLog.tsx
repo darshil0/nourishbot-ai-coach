@@ -46,16 +46,13 @@ export const HistoryLog: React.FC<Props> = ({
     setEditValue(item.label);
   };
 
-  const cancelEditing = (e: React.MouseEvent | React.KeyboardEvent) => {
+  const cancelEditing = (e: React.SyntheticEvent) => {
     e.stopPropagation();
     setEditingId(null);
     setEditValue('');
   };
 
-  const handleSave = (
-    e: React.MouseEvent | React.KeyboardEvent,
-    id: string
-  ) => {
+  const handleSave = (e: React.SyntheticEvent, id: string) => {
     e.stopPropagation();
     if (editValue.trim()) {
       onUpdateLabel(id, editValue.trim());
@@ -188,7 +185,6 @@ export const HistoryLog: React.FC<Props> = ({
                       </p>
                     </div>
                   )}
-                  {renderConciseSummary(item)}
                 </div>
 
                 <div className="flex items-center gap-0.5">

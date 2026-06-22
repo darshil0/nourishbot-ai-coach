@@ -135,6 +135,6 @@ If upgrading from a pre-release build:
 
 ---
 
-[1.1.1]: [https://github.com/yourusername/nourishbot-ai-coach/releases/tag/v1.1.1](https://github.com/yourusername/nourishbot-ai-coach/releases/tag/v1.1.1)
-[1.1.0]: [https://github.com/yourusername/nourishbot-ai-coach/releases/tag/v1.1.0](https://github.com/yourusername/nourishbot-ai-coach/releases/tag/v1.1.0)
-[1.0.0]: [https://github.com/yourusername/nourishbot-ai-coach/releases/tag/v1.0.0](https://github.com/yourusername/nourishbot-ai-coach/releases/tag/v1.0.0)
+[1.1.1]: https://github.com/yourusername/nourishbot-ai-coach/releases/tag/v1.1.1
+[1.1.0]: https://github.com/yourusername/nourishbot-ai-coach/releases/tag/v1.1.0
+[1.0.0]: https://github.com/yourusername/nourishbot-ai-coach/releases/tag/v1.0.0
