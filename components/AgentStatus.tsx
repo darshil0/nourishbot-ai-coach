@@ -2,18 +2,17 @@ import React from 'react';
 import { AgentLog } from '../types';
 import { Activity, CheckCircle, Loader, AlertCircle } from 'lucide-react';
 
-const icons = {
-  pending: <Activity className="w-5 h-5 text-gray-400" />,
-  processing: <Loader className="w-5 h-5 text-blue-500 animate-spin" />,
-  completed: <CheckCircle className="w-5 h-5 text-green-500" />,
-  error: <AlertCircle className="w-5 h-5 text-red-500" />,
-};
-
 interface AgentStatusProps {
   logs: AgentLog[];
 }
 
 export const AgentStatus: React.FC<AgentStatusProps> = ({ logs }) => {
+  const icons: Record<AgentLog['status'], React.ReactNode> = {
+    pending: <Activity className="w-5 h-5 text-gray-400" />,
+    processing: <Loader className="w-5 h-5 text-blue-500 animate-spin" />,
+    completed: <CheckCircle className="w-5 h-5 text-green-500" />,
+    error: <AlertCircle className="w-5 h-5 text-red-500" />,
+  };
   const isEmpty = logs.length === 0;
 
   return (

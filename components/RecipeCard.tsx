@@ -7,8 +7,6 @@ interface Props {
 }
 
 export const RecipeCard: React.FC<Props> = ({ recipe }) => {
-  const totalTime = recipe.prepTime + recipe.cookTime;
-
   return (
     <div className="bg-gradient-to-br from-white via-slate-50 to-emerald-50 rounded-3xl shadow-sm border border-slate-100/80 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="p-6 sm:p-8">
@@ -128,11 +126,6 @@ export const RecipeCard: React.FC<Props> = ({ recipe }) => {
           </div>
         )}
 
-        {totalTime > 0 && (
-          <div className="mt-6 text-xs text-slate-400">
-            Total time: {totalTime} minutes
-          </div>
-        )}
       </div>
     </div>
   );

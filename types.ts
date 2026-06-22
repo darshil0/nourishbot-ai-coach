@@ -50,7 +50,7 @@ export interface RecipeIngredient {
 export interface AgentLog {
   agentName: string;
   message: string;
-  status: 'processing' | 'completed' | 'error';
+  status: 'pending' | 'processing' | 'completed' | 'error';
   timestamp: Date;
 }
 
