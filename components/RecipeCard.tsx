@@ -101,7 +101,9 @@ export const RecipeCard: React.FC<Props> = ({ recipe }) => {
                   <span className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-sm font-bold text-slate-600 ring-4 ring-white">
                     {i + 1}
                   </span>
-                  <p className="text-slate-700 leading-relaxed pt-1.5">{step}</p>
+                  <p className="text-slate-700 leading-relaxed pt-1.5">
+                    {step}
+                  </p>
                 </div>
               ))}
             </div>
@@ -125,7 +127,6 @@ export const RecipeCard: React.FC<Props> = ({ recipe }) => {
             </div>
           </div>
         )}
-
       </div>
     </div>
   );
