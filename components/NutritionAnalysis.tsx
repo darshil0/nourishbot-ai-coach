@@ -1,5 +1,12 @@
 import React from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  Legend,
+} from 'recharts';
 import { NutritionData } from '../types';
 
 interface Props {
@@ -17,9 +24,12 @@ export const NutritionAnalysis: React.FC<Props> = ({ data }) => {
 
   // Calculate macro percentages for display
   const totalMacros = data.protein + data.carbohydrates + data.fat;
-  const proteinPct = totalMacros > 0 ? Math.round((data.protein / totalMacros) * 100) : 0;
-  const carbsPct = totalMacros > 0 ? Math.round((data.carbohydrates / totalMacros) * 100) : 0;
-  const fatPct = totalMacros > 0 ? Math.round((data.fat / totalMacros) * 100) : 0;
+  const proteinPct =
+    totalMacros > 0 ? Math.round((data.protein / totalMacros) * 100) : 0;
+  const carbsPct =
+    totalMacros > 0 ? Math.round((data.carbohydrates / totalMacros) * 100) : 0;
+  const fatPct =
+    totalMacros > 0 ? Math.round((data.fat / totalMacros) * 100) : 0;
 
   return (
     <div className="space-y-6">
@@ -60,7 +70,9 @@ export const NutritionAnalysis: React.FC<Props> = ({ data }) => {
             </div>
             <div>
               <div className="text-xs text-slate-500">Carbs</div>
-              <div className="font-bold text-blue-600">{data.carbohydrates}g</div>
+              <div className="font-bold text-blue-600">
+                {data.carbohydrates}g
+              </div>
               <div className="text-xs text-blue-500">{carbsPct}%</div>
             </div>
             <div>
@@ -128,7 +140,7 @@ export const NutritionAnalysis: React.FC<Props> = ({ data }) => {
 
       <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
         <h3 className="text-lg font-bold text-slate-800 mb-4">Meal Insights</h3>
-        
+
         {/* Health notes */}
         {data.notes && (
           <p className="text-slate-600 mb-6 italic">"{data.notes}"</p>

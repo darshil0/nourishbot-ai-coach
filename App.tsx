@@ -224,7 +224,11 @@ const App: React.FC = () => {
         setNutritionResult(validated);
         setRecipeResult(null);
       } else {
-        addLog('System', 'History item contains invalid nutrition data.', 'error');
+        addLog(
+          'System',
+          'History item contains invalid nutrition data.',
+          'error'
+        );
       }
     } else {
       const validated = validateRecipeData(item.result);

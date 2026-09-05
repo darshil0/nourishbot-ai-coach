@@ -22,6 +22,13 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [1.1.4] — 2026-06-13
+
+### Changed
+- Updated dependencies in `package.json` to their latest patch/minor versions (React 19.2.8, Recharts 3.10.1, ESLint 9.39.5, Vite 7.3.6, Dotenv 17.4.2).
+- Updated `index.html` importmaps to align with updated dependency versions.
+- Code style and formatting synchronized across all files using Prettier.
+
 ## [1.1.3] — 2026-06-12
 
 ### Added

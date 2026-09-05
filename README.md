@@ -35,13 +35,13 @@ NourishBot is a single-page React application fronted by a lightweight Express m
 
 ### Frontend stack
 
-| Layer | Technology |
-|---|---|
+| Layer        | Technology                  |
+| ------------ | --------------------------- |
 | UI framework | React 19.2 + TypeScript 5.8 |
-| Build tool | Vite 7.3 |
-| Styling | Tailwind CSS |
-| Icons | Lucide React |
-| Charts | Recharts |
+| Build tool   | Vite 7.3                    |
+| Styling      | Tailwind CSS                |
+| Icons        | Lucide React                |
+| Charts       | Recharts                    |
 
 ### Multi-agent system
 
@@ -113,14 +113,14 @@ Output goes to `dist/`. Serve it behind a Node/Express server that runs the midd
 
 ## Available Scripts
 
-| Script | Description |
-|---|---|
-| `npm run dev` | Start dev server with hot module replacement |
-| `npm run build` | Create an optimized production build |
-| `npm run preview` | Preview the production build locally |
-| `npm run lint` | Run ESLint across the codebase |
-| `npm run format` | Format all files with Prettier |
-| `npm run format:check` | Check formatting without writing changes |
+| Script                 | Description                                  |
+| ---------------------- | -------------------------------------------- |
+| `npm run dev`          | Start dev server with hot module replacement |
+| `npm run build`        | Create an optimized production build         |
+| `npm run preview`      | Preview the production build locally         |
+| `npm run lint`         | Run ESLint across the codebase               |
+| `npm run format`       | Format all files with Prettier               |
+| `npm run format:check` | Check formatting without writing changes     |
 
 ---
 

@@ -21,11 +21,13 @@ This project and everyone participating in it is governed by our [Code of Conduc
 ## Getting Started
 
 ### Prerequisites
+
 - [Node.js](https://nodejs.org/) 18.x LTS or newer
 - [npm](https://www.npmjs.com/) 9.x or newer
 - A [Google Gemini API key](https://aistudio.google.com/app/apikey)
 
 ### Local Setup
+
 1. Fork the repository.
 2. Clone your fork: `git clone https://github.com/your-username/nourishbot-ai-coach.git`
 3. Install dependencies: `npm install`
@@ -36,26 +38,31 @@ This project and everyone participating in it is governed by our [Code of Conduc
 ## How Can I Contribute?
 
 ### Reporting Bugs
+
 - Use the GitHub Issue Tracker.
 - Describe the bug and include steps to reproduce it.
 - Mention your environment (OS, Browser version).
 
 ### Suggesting Enhancements
+
 - Check the [CHANGELOG.MD](CHANGELOG.MD) "Planned" section to see if it's already on the roadmap.
 - Open a new issue with the tag "enhancement".
 
 ### Your First Code Contribution
+
 - Look for issues labeled "good first issue".
 - Follow the branching strategy: `feature/your-feature-name` or `fix/your-fix-name`.
 
 ## Styleguides
 
 ### Git Commit Messages
+
 - Use the present tense ("Add feature" not "Added feature").
 - Use the imperative mood ("Move cursor to..." not "Moves cursor to...").
 - Limit the first line to 72 characters or less.
 
 ### TypeScript / React Styleguide
+
 - Use functional components and hooks.
 - Use TypeScript for all new files.
 - Follow the project's Prettier and ESLint configurations.

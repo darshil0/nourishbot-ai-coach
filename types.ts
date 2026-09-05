@@ -75,19 +75,33 @@ const isRecipeIngredientArray = (value: unknown): value is RecipeIngredient[] =>
       typeof item === 'object' &&
       typeof (item as Record<string, unknown>).name === 'string' &&
       typeof (item as Record<string, unknown>).amount === 'number' &&
-      typeof (item as Record<string, unknown>).unit === 'string',
+      typeof (item as Record<string, unknown>).unit === 'string'
   );
 
-const isDietaryPreferenceArray = (value: unknown): value is DietaryPreference[] =>
+const isDietaryPreferenceArray = (
+  value: unknown
+): value is DietaryPreference[] =>
   Array.isArray(value) &&
-  value.every((item) => typeof item === 'string' && Object.values(DietaryPreference).includes(item as DietaryPreference));
+  value.every(
+    (item) =>
+      typeof item === 'string' &&
+      Object.values(DietaryPreference).includes(item as DietaryPreference)
+  );
 
-export function isNutritionData(result: NutritionData | RecipeData): result is NutritionData {
-  return 'calories' in result && 'healthScore' in result && !('title' in result);
+export function isNutritionData(
+  result: NutritionData | RecipeData
+): result is NutritionData {
+  return (
+    'calories' in result && 'healthScore' in result && !('title' in result)
+  );
 }
 
-export function isRecipeData(result: NutritionData | RecipeData): result is RecipeData {
-  return 'title' in result && 'ingredients' in result && !('healthScore' in result);
+export function isRecipeData(
+  result: NutritionData | RecipeData
+): result is RecipeData {
+  return (
+    'title' in result && 'ingredients' in result && !('healthScore' in result)
+  );
 }
 
 export function validateNutritionData(data: unknown): NutritionData | null {
